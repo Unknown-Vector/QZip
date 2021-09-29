@@ -11,10 +11,6 @@ import ui.primeq.optimizer.Function;
 import java.util.Optional;
 import java.util.Random;
 
-import ui.primeq.optimizer.Optimizer;
-
-import org.javatuples.Triplet;
-
 public class App 
 {
     public static void main( String[] args ) throws IOException
