@@ -91,14 +91,14 @@ public class Adam implements Optimizer {
                 paramsNew = ListOperation.minus(params, m);
             }
             if (ListOperation.norm(ListOperation.minus(params, paramsNew)) < this.adamSettings.getTol()) {
-                Triplet<List<Double>,Double,Double> result = new Triplet<List<Double>,Double,Double>(paramsNew, function.objectivefunction(paramsNew), t);
-                return result;
+                Triplet<List<Double>,Double,Double> result = null; // = new Triplet<List<Double>,Double,Double>(paramsNew, function.objectivefunction(paramsNew), t);
+                return result; 
             } else {
                 params.clear();
                 params.addAll(paramsNew);
             }
         }
-        Triplet<List<Double>,Double,Double> result = new Triplet<List<Double>,Double,Double>(paramsNew, function.objectivefunction(paramsNew), t);
+        Triplet<List<Double>,Double,Double> result = null; //= new Triplet<List<Double>,Double,Double>(paramsNew, function.objectivefunction(paramsNew), t);
         return result;
     }
 

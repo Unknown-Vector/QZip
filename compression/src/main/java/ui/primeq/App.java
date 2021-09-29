@@ -1,9 +1,7 @@
 package ui.primeq;
 
 import java.io.IOException;
-// import java.util.ArrayList;
-// import java.util.HashMap;
-// import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,23 +30,41 @@ public class App
         Optional<Boolean> amsgrad = Optional.of(false);
      
         Adam opt = new Adam(maxiter, tol, lr, beta1, beta2, noiseFactor, eps, amsgrad);
-       
+        
+        quantum_circuit_runner runner = new quantum_circuit_runner();
+        ArrayList<Double> vars =  new ArrayList<>();
+        vars.add(6.0);
+        vars.add(3.0);
+        vars.add(1.0);
 
-        Function f = new Function("equation");
-        ArrayList<Double> initialPoint = new ArrayList<Double>();
+        vars.add(1.22);
+        vars.add(6.0);
+        vars.add(3.14);
+        vars.add(6.0);
+        vars.add(0.0);
+        vars.add(6.0);
+        vars.add(0.05);
+        vars.add(6.0);
+        vars.add(1.56);
 
-        Random rand = new Random();
-        for(int i = 0; i < numVars; i++){
-            initialPoint.add(rand.nextDouble() * Math.PI);
-        }
+        HashMap<String, Integer> counts = runner.run(vars);
+        Function f = new Function("equation", 3);
+        int x = f.objectivefunction(counts, 5);
+        System.out.println(x);
+        // ArrayList<Double> initialPoint = new ArrayList<Double>();
 
-        int t = 0;
+        // Random rand = new Random();
+        // for(int i = 0; i < numVars; i++){
+        //     initialPoint.add(rand.nextDouble() * Math.PI);
+        // }
 
-        while(t < 10){
-            Triplet<List<Double>, Double, Double> res = opt.minimize(f, initialPoint);
-            System.out.println(res);
-            t++;
-        }
+        // int t = 0;
+
+        // while(t < 10){
+        //     Triplet<List<Double>, Double, Double> res = opt.minimize(f, initialPoint);
+        //     System.out.println(res);
+        //     t++;
+        // }
         
     }
 }
