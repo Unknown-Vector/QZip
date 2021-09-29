@@ -72,10 +72,9 @@ def generate_circuit(n, circuit_primes, combinations, no_layers, hyperparams, as
     for p in circuit_primes:
         root_arg *= p
 
-   
     thetas = [qiskit.circuit.Parameter(str(i)) for i in range(no_layers * ((2 * len(circuit_primes)) + len(combinations)))]
     thetas_rshp = np.reshape(np.asarray(thetas),(no_layers, ((2 * len(circuit_primes)) + len(combinations))))
-
+   
     assert len(hyperparams) == len(thetas)
 
     # Generate circuit
@@ -129,8 +128,12 @@ def main(arg):
     job_sim = execute(Qcir, backend = backend, shots = 2048).result()
     counts = job_sim.get_counts(Qcir)
 
+    # get the gradients of the circuit
+    grad_obj = Gradient(grad_method="param_shift")
+    gradients = gradient_function(n, circuit_primes, combinations, no_layers, hyperparams, grad_obj)
+
     print(counts)
-    return counts
+    print(gradients)
     
 
 if __name__ == "__main__":
