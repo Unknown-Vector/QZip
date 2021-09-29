@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 
-public class fileManager {
+public class FileManager {
     
-    public fileManager(){}
+    public FileManager(){}
 
     public void generateCompressedFile(String og_fileName, ArrayList<ArrayList<Integer>> data){
 		File file = new File(og_fileName + ".qzip");

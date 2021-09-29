@@ -3,6 +3,7 @@ package ui.primeq.optimizer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import ui.primeq.QuantumCircuitRunner;
 
 public class FunctionManager {
     String equation;
@@ -16,9 +17,7 @@ public class FunctionManager {
     }
 
     public List<Double> gradientfunction(List<Double> x) {
-        List<Double> result = new ArrayList<>();
-        result.addAll(x);
-        return result;
+        return QuantumCircuitRunner.Gradients(x);
     }
 
     public int objectivefunction(HashMap<String, Integer> m, int n) {
