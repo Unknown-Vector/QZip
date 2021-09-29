@@ -42,7 +42,7 @@ public class App {
         vars.add(1.56);
 
         HashMap<String, Integer> counts = runner.run(vars);
-        Function f = new Function("equation", 3);
+        FunctionManager f = new FunctionManager("equation", 3);
         int x = f.objectivefunction(counts, 5);
         System.out.println(x);
         // ArrayList<Double> initialPoint = new ArrayList<Double>();
