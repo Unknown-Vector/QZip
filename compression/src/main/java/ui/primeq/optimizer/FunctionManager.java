@@ -3,11 +3,11 @@ package ui.primeq.optimizer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Function {
+public class FunctionManager {
     String equation;
 
 
-    public Function(String equation) {
+    public FunctionManager(String equation) {
         this.equation = equation;
     }
 

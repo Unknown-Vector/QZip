@@ -1,10 +1,8 @@
 package ui.primeq.optimizer;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-
-import org.javatuples.Triplet;
 
 public class Adam implements Optimizer {
     AdamSettings adamSettings;
@@ -34,9 +32,9 @@ public class Adam implements Optimizer {
         return dictionary;
     }
 
-    public Triplet<List<Double>,Double,Double> minimize(Function function, ArrayList<Double> initialPoint) {
+    public List<Double> minimize(FunctionManager functionManager, ArrayList<Double> initialPoint) {
 
-        List<Double> derivative = function.gradientfunction(initialPoint);
+        List<Double> derivative = functionManager.gradientfunction(initialPoint);
         double t = 0;
         double beta1 = this.adamSettings.getBeta1();
         double beta2 = this.adamSettings.getBeta2();
@@ -59,7 +57,7 @@ public class Adam implements Optimizer {
 
         while (t < this.adamSettings.getMaxIter()) {
             if (t > 0) {
-                derivative = function.gradientfunction(params);
+                derivative = functionManager.gradientfunction(params);
             } 
 
             t += 1.0;
@@ -91,14 +89,14 @@ public class Adam implements Optimizer {
                 paramsNew = ListOperation.minus(params, m);
             }
             if (ListOperation.norm(ListOperation.minus(params, paramsNew)) < this.adamSettings.getTol()) {
-                Triplet<List<Double>,Double,Double> result = new Triplet<List<Double>,Double,Double>(paramsNew, function.objectivefunction(paramsNew), t);
+                List<Double> result = paramsNew;
                 return result;
             } else {
                 params.clear();
                 params.addAll(paramsNew);
             }
         }
-        Triplet<List<Double>,Double,Double> result = new Triplet<List<Double>,Double,Double>(paramsNew, function.objectivefunction(paramsNew), t);
+        List<Double> result = paramsNew;
         return result;
     }
 

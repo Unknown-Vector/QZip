@@ -6,19 +6,13 @@ import java.io.IOException;
 // import java.util.ArrayList;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import ui.primeq.optimizer.Adam;
-import ui.primeq.optimizer.Function;
-
 import java.util.Optional;
 import java.util.Random;
 
-import ui.primeq.optimizer.Optimizer;
+import ui.primeq.optimizer.Adam;
+import ui.primeq.optimizer.FunctionManager;
 
-import org.javatuples.Triplet;
-
-public class App 
-{
+public class App {
     public static void main( String[] args ) throws IOException
     {
         int maxiter = 10;
@@ -34,7 +28,7 @@ public class App
         Adam opt = new Adam(maxiter, tol, lr, beta1, beta2, noiseFactor, eps, amsgrad);
        
 
-        Function f = new Function("equation");
+        FunctionManager f = new FunctionManager("equation");
         ArrayList<Double> initialPoint = new ArrayList<Double>();
 
         Random rand = new Random();
@@ -45,8 +39,9 @@ public class App
         int t = 0;
 
         while(t < 10){
-            Triplet<List<Double>, Double, Double> res = opt.minimize(f, initialPoint);
-            System.out.println(res);
+            List<Double> res = opt.minimize(f, initialPoint);
+            double loss = f.objectivefunction(res);
+            System.out.println(res + "+" + loss);
             t++;
         }
         
