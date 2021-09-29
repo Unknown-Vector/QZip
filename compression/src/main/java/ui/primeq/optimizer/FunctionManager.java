@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Function {
+public class FunctionManager {
     String equation;
     private int[] primes = {2,3,5,7,11,17,19,23,29,31};
     private int no_primes = 0;
 
-    public Function(String equation, int no_primes) {
+
+    public FunctionManager(String equation, int no_primes) {
         this.equation = equation;
         this.no_primes = no_primes;
     }

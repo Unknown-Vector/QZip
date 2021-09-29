@@ -4,15 +4,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import ui.primeq.optimizer.Adam;
-import ui.primeq.optimizer.Function;
-
 import java.util.Optional;
 import java.util.Random;
 
-public class App 
-{
+import ui.primeq.optimizer.Adam;
+import ui.primeq.optimizer.FunctionManager;
+
+public class App {
     public static void main( String[] args ) throws IOException
     {
         int maxiter = 10;
@@ -48,6 +46,7 @@ public class App
         int x = f.objectivefunction(counts, 5);
         System.out.println(x);
         // ArrayList<Double> initialPoint = new ArrayList<Double>();
+
 
         // Random rand = new Random();
         // for(int i = 0; i < numVars; i++){
