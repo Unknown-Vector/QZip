@@ -121,15 +121,11 @@ def main(arg):
     # Define the number of primes being used and the combination of qubit ZZ gates
     circuit_primes =  primes[0: no_qubits]
     combinations = list(cm(range(len(circuit_primes)), 2))
-    Qcir, free_params = generate_circuit(n, circuit_primes, combinations, no_layers, hyperparams)
+    # get the gradients of the circuit
+    grad_obj = Gradient(grad_method="param_shift")
+    gradients = gradient_function(n, circuit_primes, combinations, no_layers, hyperparams, grad_obj)
 
-    backend = Aer.get_backend('aer_simulator')
-    # backend.set_options(device='GPU') DO not use for now until dependencies have been solved
-    job_sim = execute(Qcir, backend = backend, shots = 2048).result()
-    counts = job_sim.get_counts(Qcir)
-
-    print(counts)
- 
+    print(gradients)
     
 
 if __name__ == "__main__":

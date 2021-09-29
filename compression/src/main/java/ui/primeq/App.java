@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-
 import ui.primeq.optimizer.Adam;
 import ui.primeq.optimizer.FunctionManager;
 
@@ -25,7 +24,7 @@ public class App {
      
         Adam opt = new Adam(maxiter, tol, lr, beta1, beta2, noiseFactor, eps, amsgrad);
         
-        quantum_circuit_runner runner = new quantum_circuit_runner();
+        
         ArrayList<Double> vars =  new ArrayList<>();
         vars.add(6.0);
         vars.add(3.0);
@@ -41,10 +40,12 @@ public class App {
         vars.add(6.0);
         vars.add(1.56);
 
-        HashMap<String, Integer> counts = runner.run(vars);
-        FunctionManager f = new FunctionManager("equation", 3);
-        int x = f.objectivefunction(counts, 5);
-        System.out.println(x);
+        ArrayList<Double> gradients = QuantumCircuitRunner.Gradients(vars);
+
+        System.out.println(gradients);
+
+        HashMap<String, Integer> counts =  QuantumCircuitRunner.run(vars);
+         System.out.println(counts);
         // ArrayList<Double> initialPoint = new ArrayList<Double>();
 
 
