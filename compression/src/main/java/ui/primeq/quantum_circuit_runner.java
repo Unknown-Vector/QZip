@@ -50,7 +50,6 @@ public class quantum_circuit_runner {
             dict.put(temp_arr[0].replaceAll("'", "").trim(), Integer.valueOf(temp_arr[1].trim()));
         }
         
-        this.output = "";
 
         return dict;
     }
@@ -58,8 +57,10 @@ public class quantum_circuit_runner {
     public HashMap<String, Integer> run(ArrayList<Double> input) throws IOException{
         String var = this.stringify(input);
         
+        // Clear all previous results for new results
         this.gradient_list.clear();
         assert this.gradient_list.isEmpty();
+        this.output = "";
         
         try{
             String[] cmd = new String[3];
