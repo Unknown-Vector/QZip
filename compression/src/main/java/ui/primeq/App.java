@@ -3,7 +3,6 @@ package ui.primeq;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import ui.primeq.optimizer.Adam;
@@ -13,7 +12,10 @@ public class App {
     public static void main( String[] args ) throws IOException
     {
         int maxiter = 10;
-        int numVars = 5;
+        int numVars = 9;
+        int noOfTimes = 10;
+        int noPrimes = 3;
+        int n = 6;
         Optional<Double> tol = Optional.of(1e-6);
         Optional<Double> lr = Optional.of(1.0);
         Optional<Double> beta1 = Optional.of(0.9);
@@ -23,44 +25,36 @@ public class App {
         Optional<Boolean> amsgrad = Optional.of(false);
      
         Adam opt = new Adam(maxiter, tol, lr, beta1, beta2, noiseFactor, eps, amsgrad);
+        FunctionManager functionManager = new FunctionManager(noPrimes);
         
         
-        ArrayList<Double> vars =  new ArrayList<>();
-        vars.add(6.0);
-        vars.add(3.0);
-        vars.add(1.0);
+        ArrayList<Double> initialPoint =  new ArrayList<>();
+        ArrayList<Double> paramList = new ArrayList<>();
+        paramList.add(6.0);
+        paramList.add((double) noPrimes);
+        paramList.add(1.0);
 
-        vars.add(1.22);
-        vars.add(6.0);
-        vars.add(3.14);
-        vars.add(6.0);
-        vars.add(0.0);
-        vars.add(6.0);
-        vars.add(0.05);
-        vars.add(6.0);
-        vars.add(1.56);
+        // System.out.println(initialPoint);
 
-        ArrayList<Double> gradients = QuantumCircuitRunner.Gradients(vars);
+        int t = 0;
 
-        System.out.println(gradients);
+        while(t < noOfTimes){
 
-        HashMap<String, Integer> counts =  QuantumCircuitRunner.run(vars);
-         System.out.println(counts);
-        // ArrayList<Double> initialPoint = new ArrayList<Double>();
+            Random rand = new Random();
+            initialPoint.clear();
+            for(int i = 0; i < numVars; i++){
+                initialPoint.add(rand.nextDouble() * Math.PI);
+            }
 
-
-        // Random rand = new Random();
-        // for(int i = 0; i < numVars; i++){
-        //     initialPoint.add(rand.nextDouble() * Math.PI);
-        // }
-
-        // int t = 0;
-
-        // while(t < 10){
-        //     Triplet<List<Double>, Double, Double> res = opt.minimize(f, initialPoint);
-        //     System.out.println(res);
-        //     t++;
-        // }
+            ArrayList<Double> res = new ArrayList<>();
+            // System.out.println("2");
+            ArrayList<Double> params = opt.minimize(functionManager, initialPoint, paramList);
+            res.addAll(paramList);
+            res.addAll(params);
+            int loss = functionManager.objectivefunction(QuantumCircuitRunner.run(res), n);
+            System.out.println(loss);
+            t++;
+        }
         
     }
 }

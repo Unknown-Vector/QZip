@@ -4,21 +4,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import java.io.IOException;
+
+import ui.primeq.QuantumCircuitRunner;
+
 public class FunctionManager {
-    String equation;
     private int[] primes = {2,3,5,7,11,17,19,23,29,31};
     private int no_primes = 0;
 
 
-    public FunctionManager(String equation, int no_primes) {
-        this.equation = equation;
+    public FunctionManager(int no_primes) {
         this.no_primes = no_primes;
     }
 
-    public List<Double> gradientfunction(List<Double> x) {
-        List<Double> result = new ArrayList<>();
-        result.addAll(x);
-        return result;
+    public ArrayList<Double> gradientfunction(ArrayList<Double> x, ArrayList<Double> y) throws IOException {
+        ArrayList<Double> z = new ArrayList<>();
+        z.addAll(y);
+        z.addAll(x);
+        return QuantumCircuitRunner.Gradients(z);
     }
 
     public int objectivefunction(HashMap<String, Integer> m, int n) {
