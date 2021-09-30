@@ -21,6 +21,7 @@ public class FunctionManager {
         ArrayList<Double> z = new ArrayList<>();
         z.addAll(y);
         z.addAll(x);
+        // System.out.println(z);
         return QuantumCircuitRunner.Gradients(z);
     }
 
