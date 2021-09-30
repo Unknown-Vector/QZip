@@ -96,7 +96,6 @@ public class Adam implements Optimizer {
                 m = ListOperation.mul(m, lrEff);
                 m = ListOperation.divide(m, v);
                 paramsNew = ListOperation.minus(params, m);
-                
             }
             if (ListOperation.norm(ListOperation.minus(params, paramsNew)) < this.adamSettings.getTol()) {
                 ArrayList<Double> result = paramsNew;
