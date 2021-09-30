@@ -12,6 +12,8 @@ public class Adam implements Optimizer {
     double t;
     ArrayList<Double> m;
     ArrayList<Double> v;
+    ArrayList<Double> mTemp;
+    ArrayList<Double> vTemp;
 
 
     public Adam(int maxiter, Optional<Double> tol, Optional<Double> lr, Optional<Double> beta1, Optional<Double> beta2, Optional<Double> noiseFactor, Optional<Double> eps, Optional<Boolean> amsgrad){
@@ -33,7 +35,8 @@ public class Adam implements Optimizer {
     }
 
     public ArrayList<Double> minimize(FunctionManager functionManager, ArrayList<Double> initialPoint, ArrayList<Double> paramList) throws IOException {
-
+        // System.out.println(initialPoint);
+        // System.out.println(paramList);
         ArrayList<Double> derivative = functionManager.gradientfunction(initialPoint, paramList);
         System.out.println(" first " + derivative);
         double t = 0;
@@ -41,10 +44,16 @@ public class Adam implements Optimizer {
         double beta2 = this.adamSettings.getBeta2();
         double lr = this.adamSettings.getLr();
         double noise = this.adamSettings.getNoiseFactor();
+        m.clear();
+        v.clear();
+        mTemp.clear();
+        vTemp.clear();
 
         while ((m.size() < initialPoint.size()) && (v.size() < initialPoint.size())) {
             m.add(0.00);
             v.add(0.00);
+            mTemp.add(0.00);
+            vTemp.add(0.00);
         }
 
         ArrayList<Double> params = new ArrayList<>();
@@ -57,45 +66,50 @@ public class Adam implements Optimizer {
         
 
         while (t < this.adamSettings.getMaxIter()) {
-            // System.out.println(t + ":params: " + params);
+            System.out.println(t + ":params: " + params);
+            mTemp.clear();
+            vTemp.clear();
             if (t > 0) {
                 derivative = functionManager.gradientfunction(params, paramList);
             } 
 
             t += 1.0;
-            double temp = 1.000 - beta1;
-            ArrayList<Double> tempBeta1 = ListOperation.mul(derivative, temp);
+            double temp1 = 1.000 - beta1;
+            ArrayList<Double> tempBeta1 = ListOperation.mul(derivative, temp1);
             m = ListOperation.mul(m, beta1);
             m = ListOperation.add(m, tempBeta1);
-            // System.out.println(t + ":m: " + m);
+            System.out.println(t + ":m: " + m);
 
-            temp = 1.000 - beta2;
-            ArrayList<Double> tempBeta2 = ListOperation.mul(derivative, temp);
-            tempBeta2 = ListOperation.mul(tempBeta2, derivative);
+            double temp2 = 1.000 - beta2;
+            ArrayList<Double> tempBeta2 = ListOperation.mul(derivative, derivative);
+            tempBeta2 = ListOperation.mul(derivative, temp2);
             v = ListOperation.mul(v, beta2);
             v = ListOperation.add(v, tempBeta2);
 
-            // System.out.println(t + ":v: " + v);
+            System.out.println(t + ":v: " + v);
 
             double lrEff = lr * Math.sqrt(1.000 - Math.pow(beta2, t)) / (1 - Math.pow(beta1, t));
-            // System.out.println(t + ":lrEff: " + lrEff);
+            System.out.println(t + ":lrEff: " + lrEff);
+
+            mTemp.addAll(m);
+            vTemp.addAll(v);
 
             if (this.adamSettings.isAmsgrad() == false) {
-                v = ListOperation.sqrt(v);
-                v = ListOperation.add(v, noise);
-                // System.out.println(t + ":v2: " + v);
-                m = ListOperation.mul(m, lrEff);
-                m = ListOperation.divide(m, v);
-                // System.out.println(t + ":m2: " + m);
-                paramsNew = ListOperation.minus(params, m);
-                // System.out.println(t + ":paramsNew" + paramsNew);
+                vTemp = ListOperation.sqrt(vTemp);
+                vTemp = ListOperation.add(vTemp, noise);
+                System.out.println(t + ":v2: " + vTemp);
+                mTemp = ListOperation.mul(mTemp, lrEff);
+                mTemp = ListOperation.divide(mTemp, vTemp);
+                System.out.println(t + ":m2: " + mTemp);
+                paramsNew = ListOperation.minus(params, mTemp);
+                System.out.println(t + ":paramsNew" + paramsNew);
             } else {
-                vEff = ListOperation.maximum(vEff, v);
-                v = ListOperation.sqrt(vEff);
-                v = ListOperation.add(v, noise);
-                m = ListOperation.mul(m, lrEff);
-                m = ListOperation.divide(m, v);
-                paramsNew = ListOperation.minus(params, m);
+                vEff = ListOperation.maximum(vEff, vTemp);
+                vTemp = ListOperation.sqrt(vEff);
+                vTemp = ListOperation.add(vTemp, noise);
+                mTemp = ListOperation.mul(mTemp, lrEff);
+                mTemp = ListOperation.divide(mTemp, vTemp);
+                paramsNew = ListOperation.minus(params, mTemp);
             }
             if (ListOperation.norm(ListOperation.minus(params, paramsNew)) < this.adamSettings.getTol()) {
                 ArrayList<Double> result = paramsNew;
@@ -103,7 +117,7 @@ public class Adam implements Optimizer {
             } else {
                 params.clear();
                 params.addAll(paramsNew);
-                // System.out.println(t + ":params2" + paramsNew);
+                System.out.println(t + ":params2" + paramsNew);
             }
         }
         ArrayList<Double> result = paramsNew;
