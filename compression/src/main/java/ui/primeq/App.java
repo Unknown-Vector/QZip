@@ -7,10 +7,10 @@ import java.util.Optional;
 import java.util.Random;
 import ui.primeq.optimizer.Adam;
 import ui.primeq.optimizer.FunctionManager;
+import ui.primeq.optimizer.ListOperation;
 
 public class App {
-    public static void main( String[] args ) throws IOException
-    {
+    public static void main( String[] args ) throws IOException {
         int maxiter = 10;
         int numVars = 9;
         int noOfTimes = 10;
@@ -34,7 +34,7 @@ public class App {
         paramList.add((double) noPrimes);
         paramList.add(1.0);
 
-        // System.out.println(initialPoint);
+        // System.out.println(paramList);
 
         int t = 0;
 
@@ -45,9 +45,9 @@ public class App {
             for(int i = 0; i < numVars; i++){
                 initialPoint.add(rand.nextDouble() * Math.PI);
             }
+            // System.out.println(initialPoint);
 
             ArrayList<Double> res = new ArrayList<>();
-            // System.out.println("2");
             ArrayList<Double> params = opt.minimize(functionManager, initialPoint, paramList);
             res.addAll(paramList);
             res.addAll(params);
@@ -55,6 +55,23 @@ public class App {
             System.out.println(loss);
             t++;
         }
-        
+
+        // ArrayList<Double> initialPoint =  new ArrayList<>();
+        // double sample = 1.0;
+        // double sample2 = 2.0;
+        // for (int i = 0; i < 10; i++) {
+        //     initialPoint.add(sample);
+        //     sample += 1.0;
+        // }
+        // System.out.println(initialPoint);
+
+        // System.out.println(ListOperation.add(initialPoint, initialPoint));
+        // System.out.println(ListOperation.add(initialPoint, sample2));
+        // System.out.println(ListOperation.minus(initialPoint, initialPoint));
+        // System.out.println(ListOperation.minus(initialPoint, sample2));
+        // System.out.println(ListOperation.mul(initialPoint, initialPoint));
+        // System.out.println(ListOperation.mul(initialPoint, sample2));
+        // System.out.println(ListOperation.divide(initialPoint, initialPoint));
+        // System.out.println(ListOperation.divide(initialPoint, sample2));
     }
 }

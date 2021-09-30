@@ -1,6 +1,9 @@
 package ui.primeq.optimizer;
 
 import java.util.ArrayList;
+import java.util.stream.DoubleStream;
+import java.util.stream.Collectors;
+import org.apache.commons.math3.util.MathArrays;
 
 public class ListOperation extends ArrayList<Double>{
 
@@ -8,10 +11,17 @@ public class ListOperation extends ArrayList<Double>{
         if (a.size() != b.size()) {
             System.out.println("Error: " + a.size() + "/" + b.size());
         }
+
+        double[] aArray = new double[a.size()];
+        double[] bArray = new double[b.size()];
+
+        aArray = a.stream().mapToDouble(Double::doubleValue).toArray();
+        bArray = b.stream().mapToDouble(Double::doubleValue).toArray();
+        
+        double[] rArray = MathArrays.ebeAdd(aArray, bArray);
+
         ArrayList<Double> result = new ArrayList<>();
-        for (int i = 0; i < a.size(); i++) {
-            result.add(a.get(i) + b.get(i));
-        }
+        result = DoubleStream.of(rArray).boxed().collect(Collectors.toCollection(ArrayList::new));
         return result;
     }
 
@@ -27,10 +37,17 @@ public class ListOperation extends ArrayList<Double>{
         if (a.size() != b.size()) {
             System.out.println("Error: " + a.size() + "/" + b.size());
         }
-        ArrayList<Double> result = new ArrayList<>();
-        for (int i = 0; i < a.size(); i++) {
-            result.add(a.get(i) - b.get(i));
-        }
+
+        double[] aArray = new double[a.size()];
+        double[] bArray = new double[b.size()];
+
+        aArray = a.stream().mapToDouble(Double::doubleValue).toArray();
+        bArray = b.stream().mapToDouble(Double::doubleValue).toArray();
+        
+        double[] rArray = MathArrays.ebeSubtract(aArray, bArray);
+
+        ArrayList<Double> result = new ArrayList<Double>();
+        result = DoubleStream.of(rArray).boxed().collect(Collectors.toCollection(ArrayList::new));
         return result;
     }
 
@@ -46,10 +63,16 @@ public class ListOperation extends ArrayList<Double>{
         if (a.size() != b.size()) {
             System.out.println("Error: " + a.size() + "/" + b.size());
         }
+        double[] aArray = new double[a.size()];
+        double[] bArray = new double[b.size()];
+
+        aArray = a.stream().mapToDouble(Double::doubleValue).toArray();
+        bArray = b.stream().mapToDouble(Double::doubleValue).toArray();
+        
+        double[] rArray = MathArrays.ebeMultiply(aArray, bArray);
+
         ArrayList<Double> result = new ArrayList<>();
-        for (int i = 0; i < a.size(); i++) {
-            result.add(a.get(i) * b.get(i));
-        }
+        result = DoubleStream.of(rArray).boxed().collect(Collectors.toCollection(ArrayList::new));
         return result;
     }
 
@@ -65,10 +88,16 @@ public class ListOperation extends ArrayList<Double>{
         if (a.size() != b.size()) {
             System.out.println("Error: " + a.size() + "/" + b.size());
         }
+        double[] aArray = new double[a.size()];
+        double[] bArray = new double[b.size()];
+
+        aArray = a.stream().mapToDouble(Double::doubleValue).toArray();
+        bArray = b.stream().mapToDouble(Double::doubleValue).toArray();
+        
+        double[] rArray = MathArrays.ebeDivide(aArray, bArray);
+
         ArrayList<Double> result = new ArrayList<>();
-        for (int i = 0; i < a.size(); i++) {
-            result.add(a.get(i) / b.get(i));
-        }
+        result = DoubleStream.of(rArray).boxed().collect(Collectors.toCollection(ArrayList::new));
         return result;
     }
 
