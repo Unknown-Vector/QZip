@@ -12,10 +12,10 @@ import ui.primeq.optimizer.ListOperation;
 public class App {
     public static void main( String[] args ) throws IOException {
         int maxiter = 10;
-        int numVars = 9;
+        int numVars = 44;
         int noOfTimes = 10;
-        int noPrimes = 3;
-        int n = 6;
+        int noPrimes = 8;
+        int n = 5;
         Optional<Double> tol = Optional.of(1e-6);
         Optional<Double> lr = Optional.of(1.0);
         Optional<Double> beta1 = Optional.of(0.9);
@@ -48,11 +48,17 @@ public class App {
             // System.out.println(initialPoint);
 
             ArrayList<Double> res = new ArrayList<>();
-            ArrayList<Double> params = opt.minimize(functionManager, initialPoint, paramList);
+            // System.out.println("2");
+            // ArrayList<Double> params = opt.minimize(functionManager, initialPoint, paramList);
             res.addAll(paramList);
-            res.addAll(params);
-            int loss = functionManager.objectivefunction(QuantumCircuitRunner.run(res), n);
-            System.out.println(loss);
+            res.addAll(initialPoint);
+            // int loss = functionManager.objectivefunction(QuantumCircuitRunner.run(res), n);
+            // System.out.println(loss);
+            long startTime = System.nanoTime();
+            ArrayList<Double> x = QuantumCircuitRunner.Gradients(res);
+            long stopTime = System.nanoTime();
+            double elapsedTimeInSecond = (double) (stopTime - startTime) / 1_000_000_000;
+            System.out.println(elapsedTimeInSecond);
             t++;
         }
 
