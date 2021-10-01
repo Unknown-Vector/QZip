@@ -1,9 +1,10 @@
 package ui.primeq.optimizer;
 
+import org.apache.commons.math3.util.MathArrays;
+
 import java.util.ArrayList;
 import java.util.stream.DoubleStream;
 import java.util.stream.Collectors;
-import org.apache.commons.math3.util.MathArrays;
 
 public class ListOperation extends ArrayList<Double>{
 

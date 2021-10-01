@@ -11,10 +11,10 @@ import ui.primeq.optimizer.ListOperation;
 
 public class App {
     public static void main( String[] args ) throws IOException {
-        int maxiter = 10;
-        int numVars = 44;
-        int noOfTimes = 10;
-        int noPrimes = 8;
+        int maxiter = 50;
+        int numVars = 5;
+        int noOfTimes = 2;
+        int noPrimes = 2;
         int n = 5;
         Optional<Double> tol = Optional.of(1e-6);
         Optional<Double> lr = Optional.of(1.0);
@@ -49,16 +49,16 @@ public class App {
 
             ArrayList<Double> res = new ArrayList<>();
             // System.out.println("2");
-            // ArrayList<Double> params = opt.minimize(functionManager, initialPoint, paramList);
+            ArrayList<Double> params = opt.minimize(functionManager, initialPoint, paramList);
             res.addAll(paramList);
             res.addAll(initialPoint);
-            // int loss = functionManager.objectivefunction(QuantumCircuitRunner.run(res), n);
-            // System.out.println(loss);
-            long startTime = System.nanoTime();
-            ArrayList<Double> x = QuantumCircuitRunner.Gradients(res);
-            long stopTime = System.nanoTime();
-            double elapsedTimeInSecond = (double) (stopTime - startTime) / 1_000_000_000;
-            System.out.println(elapsedTimeInSecond);
+            int loss = functionManager.objectivefunction(QuantumCircuitRunner.run(res), n);
+            System.out.println(loss);
+            // long startTime = System.nanoTime();
+            // ArrayList<Double> x = QuantumCircuitRunner.Gradients(res);
+            // long stopTime = System.nanoTime();
+            // double elapsedTimeInSecond = (double) (stopTime - startTime) / 1_000_000_000;
+            // System.out.println(elapsedTimeInSecond);
             t++;
         }
 

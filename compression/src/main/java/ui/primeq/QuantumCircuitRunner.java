@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import java.util.Random;
+
 public class QuantumCircuitRunner {
         
     private static String stringify(ArrayList<Double> input){
@@ -20,12 +22,13 @@ public class QuantumCircuitRunner {
 
     private static ArrayList<Double> refineGradientResults(String results){
         ArrayList<Double> gradient_list = new ArrayList<Double>();
-        
+
         // Extract graidents from result string
         String [] result_gradients = (results.replaceAll("\\[|\\]", "").trim()).split("\\s+");
         for(int i = 0; i < result_gradients.length; i++){
             gradient_list.add(Double.valueOf(result_gradients[i]));
         }
+
                 
         return gradient_list;
     }
