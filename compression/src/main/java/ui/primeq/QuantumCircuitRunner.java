@@ -6,8 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import java.util.Random;
+import java.io.File; 
 
 public class QuantumCircuitRunner {
         
@@ -22,15 +21,75 @@ public class QuantumCircuitRunner {
 
     private static ArrayList<Double> refineGradientResults(String results){
         ArrayList<Double> gradient_list = new ArrayList<Double>();
-
+        
         // Extract graidents from result string
         String [] result_gradients = (results.replaceAll("\\[|\\]", "").trim()).split("\\s+");
         for(int i = 0; i < result_gradients.length; i++){
             gradient_list.add(Double.valueOf(result_gradients[i]));
         }
-
                 
         return gradient_list;
+    }
+
+    public static void flush(){
+        File python_resource = new File("compression/src/main/python/Hamiltonian.pkl"); 
+            if (python_resource.delete()) { 
+                System.out.println("Flushed : " + python_resource.getName());
+            } else {
+                System.out.println("Failed to delete the file.");
+            }
+            python_resource = new File("compression/src/main/python/Qcir_current.qpy"); 
+            if (python_resource.delete()) { 
+                System.out.println("Flushed :  " + python_resource.getName());
+            } else {
+                System.out.println("Failed to delete the file.");
+            }
+    }
+
+    public static void generateCircuitFiles(int n, int no_primes, int no_layers){
+        final String CircuitFile = "./compression/src/main/python/generate_qpy_circuit.py";
+        final String HamilFile = System.getProperty("user.dir") + "/compression/src/main/python/generate_OpMatrix.py";
+        // Please optimize this process with multithreading later!
+        try{
+            String[] cmd = new String[3];
+            cmd[0] = "python";
+            cmd[1] = HamilFile;
+            cmd[2] = String.valueOf(n) + " " + String.valueOf(no_primes);
+            
+            Runtime r = Runtime.getRuntime();
+            Process p = r.exec(cmd);
+            
+            String o = "";
+            
+            BufferedReader out = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while((o = out.readLine()) != null){
+                System.out.println(o);
+            }
+        } catch(Exception e){
+            System.out.println(e.toString());
+            e.printStackTrace();
+        }
+        
+        try{
+            String[] cmd = new String[3];
+            cmd[0] = "python";
+            cmd[1] = CircuitFile;
+            cmd[2] = String.valueOf(n) + " " + String.valueOf(no_primes) + " " + String.valueOf(no_layers);
+            
+            Runtime r = Runtime.getRuntime();
+            Process p = r.exec(cmd);
+            
+            String o = "";
+            
+            BufferedReader out = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while((o = out.readLine()) != null){
+                System.out.println(o);
+            }
+        } catch(Exception e){
+            System.out.println(e.toString());
+            e.printStackTrace();
+        }
+
     }
 
     public static ArrayList<Double> Gradients(ArrayList<Double> input) throws IOException{
@@ -48,6 +107,7 @@ public class QuantumCircuitRunner {
             Process p = r.exec(cmd);
             
             String o = "";
+            
             BufferedReader out = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while((o = out.readLine()) != null){
                 grad += o;
@@ -56,13 +116,13 @@ public class QuantumCircuitRunner {
             System.out.println(e.toString());
             e.printStackTrace();
         }
-
+        
         return refineGradientResults(grad);
     }
 
     private static HashMap<String, Integer> refineCircuitResults(String results){
         HashMap<String, Integer> dict = new HashMap<String, Integer>();
-        
+
         // Extract counts from result string
         String results_counts = results.replaceAll("[{}]", "");
         String[] res_array = results_counts.split(",");
@@ -82,13 +142,13 @@ public class QuantumCircuitRunner {
         
         // Clear all previous results for new results
         String output = "";
-        
+    
         try{
             String[] cmd = new String[3];
             cmd[0] = "python";
             cmd[1] = circuitFile;
             cmd[2] = var;
-
+            
             Runtime r = Runtime.getRuntime();
             Process p = r.exec(cmd);
             
@@ -101,7 +161,7 @@ public class QuantumCircuitRunner {
             System.out.println(e.toString());
             e.printStackTrace();
         }
-
+        
         return refineCircuitResults(output);
     }
 }

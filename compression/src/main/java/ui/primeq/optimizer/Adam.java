@@ -36,11 +36,11 @@ public class Adam implements Optimizer {
         return dictionary;
     }
 
-    public ArrayList<Double> minimize(FunctionManager functionManager, ArrayList<Double> initialPoint, ArrayList<Double> paramList) throws IOException {
+    public ArrayList<Double> minimize(FunctionManager functionManager, ArrayList<Double> initialPoint) throws IOException {
         // System.out.println(initialPoint);
         // System.out.println(paramList);
-        ArrayList<Double> derivative = functionManager.gradientfunction(initialPoint, paramList);
-        // System.out.println(" first " + derivative);
+        ArrayList<Double> derivative = functionManager.gradientfunction(initialPoint);
+        
         double t = 0;
         double beta1 = this.adamSettings.getBeta1();
         double beta2 = this.adamSettings.getBeta2();
@@ -73,10 +73,13 @@ public class Adam implements Optimizer {
 
         while (t < this.adamSettings.getMaxIter()) {
             // System.out.println(t + ":params: " + params);
+            System.out.print(". ");
             mTemp.clear();
             vTemp.clear();
             if (t > 0) {
-                derivative = functionManager.gradientfunction(params, paramList);
+                derivative = functionManager.gradientfunction(params);
+                // System.out.println("Gradients = " + derivative);
+                // System.out.println("Params = " + params);
             } 
 
             t += 1.0;

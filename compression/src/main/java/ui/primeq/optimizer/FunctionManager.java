@@ -2,7 +2,6 @@ package ui.primeq.optimizer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import java.io.IOException;
 
@@ -17,12 +16,12 @@ public class FunctionManager {
         this.no_primes = no_primes;
     }
 
-    public ArrayList<Double> gradientfunction(ArrayList<Double> x, ArrayList<Double> y) throws IOException {
-        ArrayList<Double> z = new ArrayList<>();
-        z.addAll(y);
-        z.addAll(x);
+    public ArrayList<Double> gradientfunction(ArrayList<Double> x) throws IOException {
+        // ArrayList<Double> z = new ArrayList<>();
+        // z.addAll(y);
+        // z.addAll(x);
         // System.out.println(z);
-        return QuantumCircuitRunner.Gradients(z);
+        return QuantumCircuitRunner.Gradients(x);
     }
 
     public int objectivefunction(HashMap<String, Integer> m, int n) {
@@ -30,15 +29,15 @@ public class FunctionManager {
 
         int result = 1;
         String max_bit = m.entrySet().stream().max((entry1, entry2) -> Integer.compare(entry1.getValue(), entry2.getValue())).get().getKey();
-        max_bit = new StringBuilder(max_bit).reverse().toString();
-
-        char[] bit_string = String.valueOf(max_bit).toCharArray();
+        // max_bit = new StringBuilder(max_bit).toString();
+        
+        char[] bit_string =  max_bit.toCharArray();//String.valueOf(max_bit).toCharArray();
 
         for(int i = 0; i < bit_string.length; i++){
             int exp = Character.getNumericValue(bit_string[i]);
             result *= (int)Math.pow(primes[i], exp);
         }
-        
+        System.out.println("Est. n = " + result + "   Bit String = " + max_bit);
         return Math.abs(n - result);
     }
 }
