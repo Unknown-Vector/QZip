@@ -29,7 +29,7 @@ public class App {
         ArrayList<Double> initialPoint =  new ArrayList<>();
       
         int t = 0;
-        while(n < 7){
+        while(n < 8){
             System.out.println("Running n = " + n + ":");
             QuantumCircuitRunner.generateCircuitFiles(n, noPrimes, 1);
 
@@ -38,7 +38,7 @@ public class App {
                 Random rand = new Random();
                 initialPoint.clear();
                 for(int i = 0; i < numVars; i++){
-                    initialPoint.add(rand.nextDouble() * Math.PI);
+                    initialPoint.add(Math.PI);
                 }
                 
                 ArrayList<Double> params = opt.minimize(functionManager, initialPoint);

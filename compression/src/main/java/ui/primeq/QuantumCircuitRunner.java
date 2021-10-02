@@ -32,7 +32,7 @@ public class QuantumCircuitRunner {
     }
 
     public static void flush(){
-        File python_resource = new File("compression/src/main/python/Hamiltonian.pkl"); 
+        File python_resource = new File("compression/src/main/python/Hamiltonian.npy"); 
             if (python_resource.delete()) { 
                 System.out.println("Flushed : " + python_resource.getName());
             } else {

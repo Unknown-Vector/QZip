@@ -14,6 +14,7 @@ public class Adam implements Optimizer {
     ArrayList<Double> v;
     ArrayList<Double> mTemp;
     ArrayList<Double> vTemp;
+    // final int maxsize = 100; 
 
 
     public Adam(int maxiter, Optional<Double> tol, Optional<Double> lr, Optional<Double> beta1, Optional<Double> beta2, Optional<Double> noiseFactor, Optional<Double> eps, Optional<Boolean> amsgrad){
@@ -26,6 +27,11 @@ public class Adam implements Optimizer {
         v = new ArrayList<>();
         mTemp = new ArrayList<>();
         vTemp = new ArrayList<>();
+
+        // double[] zeros = new double[maxsize];
+        // for(int i = 0; i < zeros.length; i++){
+        //     zeros[i] = 0.0;
+        // }
     }
 
     public ArrayList<OptimizerSupportLevel> getSupportLevel() {
@@ -40,7 +46,7 @@ public class Adam implements Optimizer {
         // System.out.println(initialPoint);
         // System.out.println(paramList);
         ArrayList<Double> derivative = functionManager.gradientfunction(initialPoint);
-        
+        // double[] dx = derivative.stream().mapToDouble(Double::doubleValue).toArray();
         double t = 0;
         double beta1 = this.adamSettings.getBeta1();
         double beta2 = this.adamSettings.getBeta2();
