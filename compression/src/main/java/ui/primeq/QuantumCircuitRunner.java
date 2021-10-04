@@ -27,7 +27,7 @@ public class QuantumCircuitRunner {
         for(int i = 0; i < result_gradients.length; i++){
             gradient_list.add(Double.valueOf(result_gradients[i]));
         }
-                
+        
         return gradient_list;
     }
 
@@ -96,7 +96,6 @@ public class QuantumCircuitRunner {
         final String gradientFile = System.getProperty("user.dir") + "/compression/src/main/python/quantum_gradients_run.py";
         String var = stringify(input);
         String grad = "";
-
         try{
             String[] cmd = new String[3];
             cmd[0] = "python";
@@ -107,16 +106,23 @@ public class QuantumCircuitRunner {
             Process p = r.exec(cmd);
             
             String o = "";
-            
+            long startTime = System.nanoTime();
             BufferedReader out = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime);
+            System.out.println("bufferedreader* : " + duration);
+            startTime = System.nanoTime();
             while((o = out.readLine()) != null){
                 grad += o;
             }
+            endTime = System.nanoTime();
+            duration = (endTime - startTime);
+            System.out.println("readline* : " + duration);
+            
         } catch(Exception e){
             System.out.println(e.toString());
             e.printStackTrace();
         }
-        
         return refineGradientResults(grad);
     }
 

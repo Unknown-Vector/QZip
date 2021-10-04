@@ -2,7 +2,8 @@ package ui.primeq.optimizer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.stream.DoubleStream;
+import java.util.stream.Collectors;
 import java.io.IOException;
 
 import ui.primeq.QuantumCircuitRunner;
@@ -16,12 +17,18 @@ public class FunctionManager {
         this.no_primes = no_primes;
     }
 
-    public ArrayList<Double> gradientfunction(ArrayList<Double> x) throws IOException {
-        // ArrayList<Double> z = new ArrayList<>();
+    public ArrayList<Double> gradientfunction(double[] parameters) throws IOException {
         // z.addAll(y);
         // z.addAll(x);
         // System.out.println(z);
-        return QuantumCircuitRunner.Gradients(x);
+        long startTime = System.nanoTime();
+        ArrayList<Double> x = DoubleStream.of(parameters).boxed().collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Double> z = QuantumCircuitRunner.Gradients(x);
+        long endTime = System.nanoTime();
+
+        long duration = (endTime - startTime);
+        System.out.println("gradient : " + duration);
+        return z;
     }
 
     public int objectivefunction(HashMap<String, Integer> m, int n) {
