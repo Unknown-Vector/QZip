@@ -27,22 +27,22 @@ public class QuantumCircuitRunner {
         for(int i = 0; i < result_gradients.length; i++){
             gradient_list.add(Double.valueOf(result_gradients[i]));
         }
-                
+        
         return gradient_list;
     }
 
     public static void flush(){
-        File python_resource = new File("compression/src/main/python/Hamiltonian.pkl"); 
+        File python_resource = new File("compression/src/main/python/Hamiltonian.npy"); 
             if (python_resource.delete()) { 
-                System.out.println("Flushed : " + python_resource.getName());
+                //System.out.println("Flushed : " + python_resource.getName());
             } else {
-                System.out.println("Failed to delete the file.");
+                //System.out.println("Failed to delete the file.");
             }
             python_resource = new File("compression/src/main/python/Qcir_current.qpy"); 
             if (python_resource.delete()) { 
-                System.out.println("Flushed :  " + python_resource.getName());
+                //System.out.println("Flushed :  " + python_resource.getName());
             } else {
-                System.out.println("Failed to delete the file.");
+                //System.out.println("Failed to delete the file.");
             }
     }
 
@@ -63,10 +63,10 @@ public class QuantumCircuitRunner {
             
             BufferedReader out = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while((o = out.readLine()) != null){
-                System.out.println(o);
+                //System.out.println(o);
             }
         } catch(Exception e){
-            System.out.println(e.toString());
+            //System.out.println(e.toString());
             e.printStackTrace();
         }
         
@@ -83,10 +83,10 @@ public class QuantumCircuitRunner {
             
             BufferedReader out = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while((o = out.readLine()) != null){
-                System.out.println(o);
+                //System.out.println(o);
             }
         } catch(Exception e){
-            System.out.println(e.toString());
+            //System.out.println(e.toString());
             e.printStackTrace();
         }
 
@@ -96,7 +96,6 @@ public class QuantumCircuitRunner {
         final String gradientFile = System.getProperty("user.dir") + "/compression/src/main/python/quantum_gradients_run.py";
         String var = stringify(input);
         String grad = "";
-
         try{
             String[] cmd = new String[3];
             cmd[0] = "python";
@@ -107,16 +106,23 @@ public class QuantumCircuitRunner {
             Process p = r.exec(cmd);
             
             String o = "";
-            
+            //long startTime = System.nanoTime();
             BufferedReader out = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            //long endTime = System.nanoTime();
+            //long duration = (endTime - startTime);
+            //System.out.println("bufferedreader* : " + duration);
+            //startTime = System.nanoTime();
             while((o = out.readLine()) != null){
                 grad += o;
             }
+            //endTime = System.nanoTime();
+            //duration = (endTime - startTime);
+            //System.out.println("readline* : " + duration);
+            
         } catch(Exception e){
-            System.out.println(e.toString());
+            //System.out.println(e.toString());
             e.printStackTrace();
         }
-        
         return refineGradientResults(grad);
     }
 
@@ -158,7 +164,7 @@ public class QuantumCircuitRunner {
                 output += o;
             }
         } catch(Exception e){
-            System.out.println(e.toString());
+            //System.out.println(e.toString());
             e.printStackTrace();
         }
         
