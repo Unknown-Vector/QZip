@@ -34,15 +34,15 @@ public class QuantumCircuitRunner {
     public static void flush(){
         File python_resource = new File("compression/src/main/python/Hamiltonian.npy"); 
             if (python_resource.delete()) { 
-                System.out.println("Flushed : " + python_resource.getName());
+                //System.out.println("Flushed : " + python_resource.getName());
             } else {
-                System.out.println("Failed to delete the file.");
+                //System.out.println("Failed to delete the file.");
             }
             python_resource = new File("compression/src/main/python/Qcir_current.qpy"); 
             if (python_resource.delete()) { 
-                System.out.println("Flushed :  " + python_resource.getName());
+                //System.out.println("Flushed :  " + python_resource.getName());
             } else {
-                System.out.println("Failed to delete the file.");
+                //System.out.println("Failed to delete the file.");
             }
     }
 
@@ -63,10 +63,10 @@ public class QuantumCircuitRunner {
             
             BufferedReader out = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while((o = out.readLine()) != null){
-                System.out.println(o);
+                //System.out.println(o);
             }
         } catch(Exception e){
-            System.out.println(e.toString());
+            //System.out.println(e.toString());
             e.printStackTrace();
         }
         
@@ -83,10 +83,10 @@ public class QuantumCircuitRunner {
             
             BufferedReader out = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while((o = out.readLine()) != null){
-                System.out.println(o);
+                //System.out.println(o);
             }
         } catch(Exception e){
-            System.out.println(e.toString());
+            //System.out.println(e.toString());
             e.printStackTrace();
         }
 
@@ -106,21 +106,21 @@ public class QuantumCircuitRunner {
             Process p = r.exec(cmd);
             
             String o = "";
-            long startTime = System.nanoTime();
+            //long startTime = System.nanoTime();
             BufferedReader out = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            long endTime = System.nanoTime();
-            long duration = (endTime - startTime);
-            System.out.println("bufferedreader* : " + duration);
-            startTime = System.nanoTime();
+            //long endTime = System.nanoTime();
+            //long duration = (endTime - startTime);
+            //System.out.println("bufferedreader* : " + duration);
+            //startTime = System.nanoTime();
             while((o = out.readLine()) != null){
                 grad += o;
             }
-            endTime = System.nanoTime();
-            duration = (endTime - startTime);
-            System.out.println("readline* : " + duration);
+            //endTime = System.nanoTime();
+            //duration = (endTime - startTime);
+            //System.out.println("readline* : " + duration);
             
         } catch(Exception e){
-            System.out.println(e.toString());
+            //System.out.println(e.toString());
             e.printStackTrace();
         }
         return refineGradientResults(grad);
@@ -164,7 +164,7 @@ public class QuantumCircuitRunner {
                 output += o;
             }
         } catch(Exception e){
-            System.out.println(e.toString());
+            //System.out.println(e.toString());
             e.printStackTrace();
         }
         

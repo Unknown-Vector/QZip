@@ -21,13 +21,13 @@ public class FunctionManager {
         // z.addAll(y);
         // z.addAll(x);
         // System.out.println(z);
-        long startTime = System.nanoTime();
+        // long startTime = System.nanoTime();
         ArrayList<Double> x = DoubleStream.of(parameters).boxed().collect(Collectors.toCollection(ArrayList::new));
         ArrayList<Double> z = QuantumCircuitRunner.Gradients(x);
-        long endTime = System.nanoTime();
+        // long endTime = System.nanoTime();
 
-        long duration = (endTime - startTime);
-        System.out.println("gradient : " + duration);
+        // long duration = (endTime - startTime);
+        // System.out.println("gradient : " + duration);
         return z;
     }
 
