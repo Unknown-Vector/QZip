@@ -1,10 +1,14 @@
 package ui.primeq.optimizer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.stream.DoubleStream;
 import java.util.stream.Collectors;
 import java.io.IOException;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.ejml.data.ZMatrixRMaj;
 
 import ui.primeq.QuantumCircuitRunner;
 
@@ -17,23 +21,27 @@ public class FunctionManager {
         this.no_primes = no_primes;
     }
 
-    public ArrayList<Double> gradientfunction(double[] parameters) throws IOException {
+    public double[] gradientfunction(double[] parameters, ZMatrixRMaj H, double[] cir_coeffs) throws IOException {
+        //generate circuit coeffs.
+
         // z.addAll(y);
         // z.addAll(x);
         // System.out.println(z);
         // long startTime = System.nanoTime();
-        ArrayList<Double> x = DoubleStream.of(parameters).boxed().collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Double> z = QuantumCircuitRunner.Gradients(x);
+        ArrayList<Double> params = DoubleStream.of(parameters).boxed().collect(Collectors.toCollection(ArrayList::new));
+        double[] graidents = QuantumCircuitRunner.Gradients(params, H, cir_coeffs);
         // long endTime = System.nanoTime();
 
         // long duration = (endTime - startTime);
         // System.out.println("gradient : " + duration);
-        return z;
+        return graidents;
     }
 
     public int objectivefunction(HashMap<String, Integer> m, int n) {
         assert no_primes > 0;
-
+        int[] circuit_primes = Arrays.copyOf(primes, this.no_primes);
+        ArrayUtils.reverse(circuit_primes);
+    
         int result = 1;
         String max_bit = m.entrySet().stream().max((entry1, entry2) -> Integer.compare(entry1.getValue(), entry2.getValue())).get().getKey();
         // max_bit = new StringBuilder(max_bit).toString();
@@ -42,7 +50,7 @@ public class FunctionManager {
 
         for(int i = 0; i < bit_string.length; i++){
             int exp = Character.getNumericValue(bit_string[i]);
-            result *= (int)Math.pow(primes[i], exp);
+            result *= (int)Math.pow(circuit_primes[i], exp);
         }
         System.out.println("Est. n = " + result + "   Bit String = " + max_bit);
         return Math.abs(n - result);

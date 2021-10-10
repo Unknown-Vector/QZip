@@ -2,6 +2,7 @@ import sys
 from qiskit.opflow import I, Z 
 from numpy import log as ln
 from numpy import save
+from numpy import diagonal, round, real
 import pickle
 
 def save_obj(obj, name ):
@@ -52,14 +53,14 @@ def hamiltonian(n, primes):
 
 def main(n, no_primes):
     primes = [2,3,5,7,11,17,19,23,29,31]
-    primes = primes[0 : no_primes]
+    primes = (primes[0 : no_primes])[::-1]
 
     ham = hamiltonian(n, primes)
     Ham_matrix = ham.to_matrix()
-    save("compression/src/main/python/Hamiltonian.npy", Ham_matrix)
+    # save("compression/src/main/python/Hamiltonian.npy", Ham_matrix)
     # save_obj(Ham_matrix,"compression/src/main/python/Hamiltonian")
-
-    print("Generated Hamiltonian File......")
+    print(round(diagonal(real(Ham_matrix)), 15))
+    # print("Generated Hamiltonian File......")
 
 
 if __name__ == "__main__":
