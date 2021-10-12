@@ -1,10 +1,10 @@
-package ui.primeq.matrixandvectors;
+// package ui.primeq.matrixandvectors;
 
-public class Hamiltonian {
+// public class Hamiltonian {
 
-    double[][] hamiltonian;
+//     double[][] hamiltonian;
 
-    public Hamiltonian(int n) {
-        this.hamiltonian = new double[n][n];
-    }
-}
+//     public Hamiltonian(int n) {
+//         this.hamiltonian = new double[n][n];
+//     }
+// }

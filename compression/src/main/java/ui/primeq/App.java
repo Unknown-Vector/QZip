@@ -11,6 +11,8 @@ import ui.primeq.optimizer.FunctionManager;
 
 public class App {
     public static void main( String[] args ) throws IOException {
+        for (String elem : args)
+            System.out.println(elem);
         int maxiter = 100;
         int[] numVars = {5, 9, 14, 20, 27, 35, 44};
         int numLayers = 1;
