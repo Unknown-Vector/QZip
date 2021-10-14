@@ -19,7 +19,6 @@ public class FileManager {
         ArrayList<String> raw_data =  new ArrayList<>();
         for (int i = 0; i < data.length; i++) {
             raw_data.add(unique_map.get(data[i]));
-
         }
         try{
 		    FileUtils.writeLines(file, raw_data, true);
