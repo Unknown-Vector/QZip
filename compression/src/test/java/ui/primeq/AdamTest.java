@@ -43,15 +43,15 @@ public class AdamTest {
         assertEquals(supportLevel, adam.getSupportLevel());
     }
 
-    @Test
-    void testMinimize() throws IOException{
-        ArrayList<Double> answer = new ArrayList<>();
-        // Key in answer here.
-        FunctionManager functionManager = new FunctionManager(noPrimes);
-        ArrayList<Double> initialPoint = new ArrayList<>();
-        // Initialize initialPoint here.
-        assertEquals(answer, adam.minimize(functionManager, initialPoint));
-    }
+    // @Test
+    // void testMinimize() throws IOException{
+    //     ArrayList<Double> answer = new ArrayList<>();
+    //     // Key in answer here.
+    //     FunctionManager functionManager = new FunctionManager(noPrimes);
+    //     ArrayList<Double> initialPoint = new ArrayList<>();
+    //     // Initialize initialPoint here.
+    //     assertEquals(answer, adam.minimize(functionManager, initialPoint));
+    // }
 
     @Test 
     void testGradientSupportLevel() {

@@ -32,9 +32,10 @@ public class App {
         Optional<Double> noiseFactor = Optional.of(1e-7);
         Optional<Double> eps = Optional.of(1e-10);
         Optional<Boolean> amsgrad = Optional.of(false);
+        String nameOfFile = "sample";
         
         FileManager fileManager =  new FileManager();
-        byte[] data = fileManager.readFileAsBytes("./sample.txt");
+        byte[] data = fileManager.readFileAsBytes("./" + nameOfFile + ".txt");
 
         int len = data.length;
         ByteBuffer bytebuf;
@@ -115,6 +116,7 @@ public class App {
         }
 
         System.out.println(unique_map);
+        fileManager.generateCompressedFile(nameOfFile, unique_map, data_int);
 
     }
 }
