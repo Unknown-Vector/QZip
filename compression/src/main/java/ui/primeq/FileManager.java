@@ -1,13 +1,16 @@
 package ui.primeq;
 
-import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
-import java.nio.file.Files;
+
+import org.apache.commons.io.FileUtils;
+
 
 
 public class FileManager {
@@ -39,10 +42,32 @@ public class FileManager {
         return list;
     }
 
-    public byte[] readFileAsBytes(String filePath) throws FileNotFoundException, IOException{
+    public int[] readFile(String filePath) throws FileNotFoundException, IOException{
         File datafile = new File(filePath);
         byte[] data = Files.readAllBytes(datafile.toPath());
-        return data;
+
+        int len = data.length;
+        ByteBuffer bytebuf;
+        if(data.length % 2 != 0){
+            byte[] data_temp = new byte[data.length + 1];
+            System.arraycopy(data, 0, data_temp, 0, data.length);
+            bytebuf = ByteBuffer.wrap(data_temp);
+            len ++;
+        }else{
+            bytebuf = ByteBuffer.wrap(data);
+        }
+        
+        int[] data_int = new int[len];
+
+        int k = 0;
+        while(bytebuf.remaining() > 0){          
+            char x = bytebuf.getChar();
+            System.out.println((int) x);
+            data_int[k] = (int) x;
+            k++;
+        }
+
+        return data_int;
     }
 
     public ArrayList<Integer> readQzipFile(){

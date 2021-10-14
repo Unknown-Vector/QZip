@@ -3,7 +3,6 @@ package ui.primeq.optimizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Optional;
 import java.io.IOException;
 import java.util.stream.DoubleStream;
 import java.util.stream.Collectors;
@@ -30,8 +29,8 @@ public class Adam implements Optimizer {
     final int maxsize = 400; 
 
 
-    public Adam(int maxiter, Optional<Double> tol, Optional<Double> lr, Optional<Double> beta1, Optional<Double> beta2, Optional<Double> noiseFactor, Optional<Double> eps, Optional<Boolean> amsgrad){
-        this.adamSettings = new AdamSettings(maxiter, tol.orElse(1e-6), lr.orElse(0.001), beta1.orElse(0.9), beta2.orElse(0.99), noiseFactor.orElse(1e-08), eps.orElse(1e-10), amsgrad.orElse(false));
+    public Adam(AdamSettings adamSettings){
+        this.adamSettings = adamSettings;
         this.gradientSupportLevel = OptimizerSupportLevel.SUPPORTED;
         this.boundsSupportLevel = OptimizerSupportLevel.IGNORED;
         this.initialpointSupportLevel = OptimizerSupportLevel.SUPPORTED;
