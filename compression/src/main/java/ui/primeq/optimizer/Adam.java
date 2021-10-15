@@ -26,7 +26,7 @@ public class Adam implements Optimizer {
     double[] zeros;
     Log ln;
     Sqrt sqrt;
-    final int[] primes = {2, 3, 5, 7, 11, 13};
+    final int[] primes = {2,3,5,7,11,13,17,19,23,29,31};
     final int maxsize = 400; 
 
 
@@ -70,6 +70,9 @@ public class Adam implements Optimizer {
         double[] paramsNew = Arrays.copyOf(params, param_size);
         
         double[] dx = functionManager.gradientfunction(params, H, cir_coeffs);
+        // for(int l = 0; l < dx.length; l++){
+        //     System.out.println("DX = " + dx[l]);
+        // }
         //System.out.println("derivative = " +  derv);
         // double[] dx = derv.stream().mapToDouble(Double::doubleValue).toArray();
         // //System.out.println(derivative);
@@ -189,9 +192,9 @@ public class Adam implements Optimizer {
                 // params.addAll(paramsNew);
                 // //System.out.println(t + ":params2" + paramsNew);
                 params = Arrays.copyOf(paramsNew, param_size);
-                for(int i = 0; i < params.length; i++){
-                    //System.out.println("P = "+ paramsNew[i]);
-                }
+                // for(int i = 0; i < params.length; i++){
+                //     System.out.println("P = "+ paramsNew[i]);
+                // }
 
             }
         }
@@ -213,19 +216,19 @@ public class Adam implements Optimizer {
         for(int i = 0; i < numLayers; i++){
             
             for(int j = 0; j < noPrimes; j++){
-               double coeff = 2 * this.ln.value(n / this.sqrt.value(root_coeff)) * this.ln.value(cir_primes[j]); 
+               double coeff = 2 * this.ln.value((n) / this.sqrt.value(root_coeff)) * this.ln.value(cir_primes[j]) / (i+1); 
                circuit_coeffs.add(coeff);
             }
 
             Iterator<int[]> combinations = new Combinations(noPrimes, 2).iterator();
             while(combinations.hasNext()){
                 int[] c  = combinations.next();
-                double comb_coeff = this.ln.value(cir_primes[c[0]]) * this.ln.value(cir_primes[c[1]]);
+                double comb_coeff = this.ln.value(cir_primes[c[0]]) * this.ln.value(cir_primes[c[1]]) / (i+1);
                 circuit_coeffs.add(comb_coeff);
             }
 
             for(int k = 0; k < noPrimes; k++){
-                circuit_coeffs.add(1.0);
+                circuit_coeffs.add(1.0 / (i+1));
             }
         }
 

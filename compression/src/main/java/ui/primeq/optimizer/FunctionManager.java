@@ -29,7 +29,11 @@ public class FunctionManager {
         // System.out.println(z);
         // long startTime = System.nanoTime();
         ArrayList<Double> params = DoubleStream.of(parameters).boxed().collect(Collectors.toCollection(ArrayList::new));
+        // System.out.println("PARAMS = " + params);
         double[] graidents = QuantumCircuitRunner.Gradients(params, H, cir_coeffs);
+        // for(int l = 0; l < graidents.length; l++){
+        //     System.out.println("DX = " + graidents[l]);
+        // }
         // long endTime = System.nanoTime();
 
         // long duration = (endTime - startTime);
@@ -37,7 +41,7 @@ public class FunctionManager {
         return graidents;
     }
 
-    public int objectivefunction(HashMap<String, Integer> m, int n) {
+    public String objectivefunction(HashMap<String, Integer> m, int n) {
         assert no_primes > 0;
         int[] circuit_primes = Arrays.copyOf(primes, this.no_primes);
         ArrayUtils.reverse(circuit_primes);
@@ -53,6 +57,7 @@ public class FunctionManager {
             result *= (int)Math.pow(circuit_primes[i], exp);
         }
         System.out.println("Est. n = " + result + "   Bit String = " + max_bit);
-        return Math.abs(n - result);
+
+        return max_bit + "," + Integer.toString(result);
     }
 }

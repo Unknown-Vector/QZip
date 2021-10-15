@@ -34,7 +34,7 @@ def main(arg):
         quantum_circuit = qpy_serialization.load(fd)[0]
 
     for shift in [PI/2, -PI/2]:
-        pool = multiprocessing.Pool(processes = 10)
+        pool = multiprocessing.Pool(processes = 15)
         stateIter = [(i, shift, hyperparams, quantum_circuit,) for i in range(len(hyperparams))]
         vec = pool.starmap(stateVectorForj, stateIter)
         # for j in range(len(hyperparams)):

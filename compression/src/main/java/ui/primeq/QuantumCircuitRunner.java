@@ -64,7 +64,6 @@ public class QuantumCircuitRunner {
                 String[] Zval = val.split(",");
                 sv_temp.set(i, 0, Double.valueOf(Zval[0]), Double.valueOf(Zval[1]));
             }
-
             current_statevector.add(sv_temp);
 
         }
@@ -120,6 +119,7 @@ public class QuantumCircuitRunner {
             //System.out.println(e.toString());
             e.printStackTrace();
         }
+        // System.out.println(diagonals);
 
         try{
             String[] cmd = new String[3];
@@ -154,7 +154,6 @@ public class QuantumCircuitRunner {
         ArrayList<ArrayList<ZMatrixRMaj>> statvectors = stateVectors(input);
         // long endTime = System.nanoTime();
         // long duration = (endTime - startTime);
-        // System.out.println("Python Script: " + duration);
 
         assert(statvectors.size() == 2 && statvectors.get(0).size() == cir_coeffs.length && cir_coeffs.length == statvectors.get(1).size());
      
@@ -164,7 +163,7 @@ public class QuantumCircuitRunner {
         for(int i = 0; i < p_shift.size(); i++){
             ZMatrixRMaj p_pi = p_shift.get(i);
             ZMatrixRMaj m_pi = m_shift.get(i);
-           
+            
             ZMatrixRMaj con_pPi = CommonOps_ZDRM.transposeConjugate(p_pi, null);
             ZMatrixRMaj con_mPi = CommonOps_ZDRM.transposeConjugate(m_pi, null);
 
@@ -187,7 +186,9 @@ public class QuantumCircuitRunner {
             obserMpi.get(0, 0, m_PI);
 
             ComplexMath_F64.minus(p_PI, m_PI, diff);
+            // System.out.println("Diff = " + diff.toString());
             double grad = cir_coeffs[i] * 0.5 * diff.real;
+            // System.out.println("Gradient = " + grad);
 
             graidents[i] = (double) grad;
         }
@@ -198,6 +199,7 @@ public class QuantumCircuitRunner {
     public static  ArrayList<ArrayList<ZMatrixRMaj>> stateVectors(ArrayList<Double> input) throws IOException{
         final String svFile = System.getProperty("user.dir") + "/compression/src/main/python/quantum_statevector.py";
         String var = stringify(input);
+        // System.out.println(var);
         String states = "";
         // long startTime = System.nanoTime();
         try{
