@@ -1,4 +1,4 @@
-./compression/target/
+compression/target/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -10,8 +10,8 @@ buildNumber.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
 .vscode/*
-./compression/.classpath
-./compression/.project
-./compression/.settings
-./compression/src/main/python/*.npy
-./compression/src/main/python/*.qpy
+compression/.classpath
+compression/.project
+compression/.settings
+compression/src/main/python/*.npy
+compression/src/main/python/*.qpy
