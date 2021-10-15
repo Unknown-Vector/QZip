@@ -19,25 +19,20 @@ public class App {
         // for (String elem : args)
         //     System.out.println(elem);
         // Initialize constants
-        int maxiter = 1000;
         int[] numVars = {5, 9, 14, 20, 27, 35, 44, 54, 65};
         int numLayers = 10;
         int noOfTimes = 1;
         int noPrimes = 8;
         int n = 0;
-        double tol = 1e-10;
-        double lr = 0.01;
-        double beta1 = 0.9;
-        double beta2 = 0.99;
-        double noiseFactor = 1e-7;
-        double eps = 1e-10;
-        boolean amsgrad = false;
         String nameOfFile = "sample";
         
-        // Initialize Manangers
+        // Initialize Managers
         FileManager fileManager =  new FileManager();
         FunctionManager functionManager = new FunctionManager(noPrimes);
-        Config config = new Config(maxiter, numLayers, noOfTimes, noPrimes, tol, lr, beta1, beta2, noiseFactor, eps, amsgrad);
+        
+        //Initialize Config
+        Config config = new Config();
+        config = config.initConfig();
 
         // Initialize Optimizer
         Adam opt = new Adam(config.getAdamSettings());

@@ -75,4 +75,18 @@ public class AdamSettings extends OptimizerSettings {
     public void setAmsgradTrue() {
         this.amsgrad = true;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("maxiter: " + super.getMaxIter());
+        sb.append("tol: " + this.tol);
+        sb.append("lr: " + this.lr);
+        sb.append("beta1: " + this.beta1);
+        sb.append("beta2: " + this.beta2);
+        sb.append("noisefactor" + this.noiseFactor);
+        sb.append("eps: " + this.eps);
+        sb.append("amsgrad: " + this.amsgrad);
+        return sb.toString();
+    }
 }

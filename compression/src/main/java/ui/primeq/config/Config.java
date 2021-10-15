@@ -1,23 +1,31 @@
 package ui.primeq.config;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import ui.primeq.optimizer.AdamSettings;
 
 public class Config {
-    int maxiter;
-    int[] numVars = {5, 9, 14, 20, 27, 35, 44, 54, 65};
-    int numLayers;
-    int noOfTimes;
-    int noPrimes;
-    AdamSettings adamSettings;
+
+    private Path settingsPath = Paths.get("./config.json");
+
+    private int[] numVars = {5, 9, 14, 20, 27, 35, 44, 54, 65};
+    private int numLayers;
+    private int noOfTimes;
+    private int noPrimes;
+    private AdamSettings adamSettings;
+
+    public Config() {}
 
     public Config(int maxiter, int numLayers, int noOfTimes, int noPrimes, double tol, 
         double lr, double beta1, double beta2, double noiseFactor, double eps, boolean amsgrad) {
-            this.maxiter = maxiter;
             this.numLayers = numLayers;
             this.noOfTimes = noOfTimes;
             this.noPrimes = noPrimes;
+            Optional<Integer> opMaxIter = Optional.of(maxiter);
             Optional<Double> opTol = Optional.of(tol);
             Optional<Double> opLr = Optional.of(lr);
             Optional<Double> opBeta1 = Optional.of(beta1);
@@ -25,16 +33,40 @@ public class Config {
             Optional<Double> opNoiseFactor = Optional.of(noiseFactor);
             Optional<Double> opEps = Optional.of(eps);
             Optional<Boolean> opAmsgrad = Optional.of(amsgrad);
-            this.adamSettings = new AdamSettings(this.maxiter, opTol.orElse(1e-6), opLr.orElse(0.001), opBeta1.orElse(0.9), 
+            this.adamSettings = new AdamSettings(opMaxIter.orElse(100), opTol.orElse(1e-6), opLr.orElse(0.001), opBeta1.orElse(0.9), 
                 opBeta2.orElse(0.99), opNoiseFactor.orElse(1e-8), opEps.orElse(1e-10), opAmsgrad.orElse(false));
     }
 
+    public Config initConfig() throws IOException{
+        return readJson();
+    }
+
+    public Config DefaultConfig() {
+        return new Config(100, 1, 1, 2, 1e-6, 0.001, 0.9, 0.99, 1e-8, 1e-10, false);
+    }
+
+    private Config readJson() throws IOException{
+        Config config = DefaultConfig();
+        if(!Files.exists(this.settingsPath)) {
+            // Create new json with default values
+            JsonUtil.serializeObjectToJsonFile(settingsPath, config);
+            return this.readJson();
+        } else {
+            // Deserialize json
+            return JsonUtil.deserializeObjectFromJsonFile(settingsPath, config);
+        }
+    }
+
+    public int[] getNumVars() {
+        return this.numVars;
+    }
+
     public int getMaxIter() {
-        return this.maxiter;
+        return this.adamSettings.getMaxIter();
     }
 
     public void setMaxIter(int maxiter) {
-        this.maxiter = maxiter;
+        this.adamSettings.setMaxIter(maxiter);
     }
 
     public int getNumLayers() {
@@ -119,5 +151,15 @@ public class Config {
 
     public AdamSettings getAdamSettings() {
         return this.adamSettings;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("numLayers: " + this.numLayers);
+        sb.append("noOfTimes: " + this.noOfTimes);
+        sb.append("noPrimes: " + this.noPrimes);
+        sb.append("adamSettings: " + this.adamSettings.toString());
+        return sb.toString();
     }
 }
