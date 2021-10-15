@@ -2,9 +2,11 @@ package ui.primeq;
 
 import org.apache.commons.io.FileUtils;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+import java.nio.file.Files;
 
 
 public class FileManager {
@@ -34,9 +36,9 @@ public class FileManager {
         return list;
     }
 
-    public String readFile(){
-        String data = "";
-
+    public byte[] readFileAsBytes(String filePath) throws FileNotFoundException, IOException{
+        File datafile = new File(filePath);
+        byte[] data = Files.readAllBytes(datafile.toPath());
         return data;
     }
 
