@@ -16,10 +16,8 @@ import org.ejml.dense.row.NormOps_ZDRM;
 
 public class App {
     public static void main( String[] args ) throws IOException {
-        // for (String elem : args)
-        //     System.out.println(elem);
 
-        //Initialize Config
+        // Initialize Config
         Config config = new Config();
         config = config.initConfig();
 
@@ -40,7 +38,7 @@ public class App {
         HashMap<Integer, String> unique_map =  new HashMap<>();
 
         // Convert File into int array to be processed
-        int[] data = fileManager.readFile("./" + nameOfFile + ".txt");
+        int[] data = fileManager.readFile(Config.samplesPath);
         int[] unique = Arrays.stream(data).distinct().toArray();
         System.out.println("Unique Values size = " + unique.length);
 

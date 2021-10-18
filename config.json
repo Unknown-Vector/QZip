@@ -2,7 +2,7 @@
   "numVars" : [ 5, 9, 14, 20, 27, 35, 44, 54, 65 ],
   "numLayers" : 1,
   "noOfTimes" : 1,
-  "noPrimes" : 9,
+  "noPrimes" : 2,
   "adamSettings" : {
     "lr" : 0.001,
     "beta1" : 0.9,
@@ -10,7 +10,7 @@
     "noiseFactor" : 1.0E-8,
     "eps" : 1.0E-10,
     "amsgrad" : false,
-    "maxIter" : 1000,
+    "maxIter" : 100,
     "tol" : 1.0E-6
   }
 }

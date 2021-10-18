@@ -11,17 +11,18 @@ import ui.primeq.optimizer.AdamSettings;
 
 public class Config {
 
-    private Path settingsPath = Paths.get("./config.json");
+    public static final Path samplesPath = Paths.get("./sample.txt");
+    private static final Path settingsPath = Paths.get("./config.json");
 
-    protected int[] numVars = {5, 9, 14, 20, 27, 35, 44, 54, 65};
-    protected int numLayers;
-    protected int noOfTimes;
-    protected int noPrimes;
-    protected AdamSettings adamSettings;
+    private int[] numVars = {5, 9, 14, 20, 27, 35, 44, 54, 65};
+    private int numLayers;
+    private int noOfTimes;
+    private int noPrimes;
+    private AdamSettings adamSettings;
 
     public Config() {}
 
-    public Config(int maxiter, int numLayers, int noOfTimes, int noPrimes, double tol, 
+    private Config(int maxiter, int numLayers, int noOfTimes, int noPrimes, double tol, 
         double lr, double beta1, double beta2, double noiseFactor, double eps, boolean amsgrad) {
             this.numLayers = numLayers;
             this.noOfTimes = noOfTimes;
@@ -39,10 +40,8 @@ public class Config {
 
     private Config readJson() throws IOException{
         Config config = DefaultConfig();
-        System.out.println(config.toString());
-        if(!Files.exists(this.settingsPath)) {
+        if(!Files.exists(Config.settingsPath)) {
             // Create new json with default values
-            System.out.println("hi");
             JsonUtil.serializeObjectToJsonFile(settingsPath, config);
             return this.readJson();
         } else {

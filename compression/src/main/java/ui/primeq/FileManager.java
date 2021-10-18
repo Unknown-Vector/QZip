@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -55,21 +55,20 @@ public class FileManager {
         return str.substring(0, position) + ch + str.substring(position);
     }
 
-    private ArrayList<String> dataToString(ArrayList<ArrayList<Integer>> data){
-        ArrayList<String> list = new ArrayList<String>();
+    // private ArrayList<String> dataToString(ArrayList<ArrayList<Integer>> data){
+    //     ArrayList<String> list = new ArrayList<String>();
 
-        for(int i = 0; i < data.size(); i++){
-            ArrayList<Integer> temp = data.get(i);
-            String dataStr = temp.stream().map(Object::toString).collect(Collectors.joining());
-            list.add(dataStr);
-        }
+    //     for(int i = 0; i < data.size(); i++){
+    //         ArrayList<Integer> temp = data.get(i);
+    //         String dataStr = temp.stream().map(Object::toString).collect(Collectors.joining());
+    //         list.add(dataStr);
+    //     }
 
-        return list;
-    }
+    //     return list;
+    // }
 
-    public int[] readFile(String filePath) throws FileNotFoundException, IOException{
-        File datafile = new File(filePath);
-        byte[] data = Files.readAllBytes(datafile.toPath());
+    public int[] readFile(Path path) throws FileNotFoundException, IOException{
+        byte[] data = Files.readAllBytes(path);
 
         int len = data.length;
         ByteBuffer bytebuf;
