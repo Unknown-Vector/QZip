@@ -13,20 +13,19 @@ import org.apache.commons.math3.analysis.function.Sqrt;
 import org.ejml.data.ZMatrixRMaj;
 
 public class Adam implements Optimizer {
-    AdamSettings adamSettings;
-    OptimizerSupportLevel gradientSupportLevel;
-    OptimizerSupportLevel boundsSupportLevel;
-    OptimizerSupportLevel initialpointSupportLevel;
-    double t;
-    double[] m;
-    double[] v;
-    double[] mTemp;
-    double[] vTemp;
-    double[] zeros;
-    Log ln;
-    Sqrt sqrt;
-    final int[] primes = {2,3,5,7,11,13,17,19,23,29,31};
-    final int maxsize = 400; 
+    private AdamSettings adamSettings;
+    private OptimizerSupportLevel gradientSupportLevel;
+    private OptimizerSupportLevel boundsSupportLevel;
+    private OptimizerSupportLevel initialpointSupportLevel;
+    private double[] m;
+    private double[] v;
+    private double[] mTemp;
+    private double[] vTemp;
+    private double[] zeros;
+    private Log ln;
+    private Sqrt sqrt;
+    private static final int[] primes = {2,3,5,7,11,13,17,19,23,29,31};
+    private static int maxsize = 400; 
 
 
     public Adam(AdamSettings adamSettings){
@@ -34,7 +33,6 @@ public class Adam implements Optimizer {
         this.gradientSupportLevel = OptimizerSupportLevel.SUPPORTED;
         this.boundsSupportLevel = OptimizerSupportLevel.IGNORED;
         this.initialpointSupportLevel = OptimizerSupportLevel.SUPPORTED;
-        t = 0;
         // m = new ArrayList<>();
         // v = new ArrayList<>();
         // mTemp = new ArrayList<>();
