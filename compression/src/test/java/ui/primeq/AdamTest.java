@@ -30,7 +30,7 @@ public class AdamTest {
 
     @BeforeEach
     void setUp() {
-        adam = new Adam(maxiter, tol, lr, beta1, beta2, noiseFactor, eps, amsgrad);
+        // adam = new Adam(maxiter, tol, lr, beta1, beta2, noiseFactor, eps, amsgrad);
     }
 
     @Test

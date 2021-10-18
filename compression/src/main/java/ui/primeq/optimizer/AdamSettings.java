@@ -9,6 +9,10 @@ public class AdamSettings extends OptimizerSettings {
     private double eps;
     private boolean amsgrad;
 
+    public AdamSettings(){
+        super();
+    }
+
     public AdamSettings(int maxiter, double tol, double lr, double beta1, double beta2, double noiseFactor, double eps, boolean amsgrad){
         super(maxiter);
         this.tol = tol;
@@ -72,8 +76,8 @@ public class AdamSettings extends OptimizerSettings {
         return this.amsgrad;
     }
 
-    public void setAmsgradTrue() {
-        this.amsgrad = true;
+    public void setAmsgrad(boolean value) {
+        this.amsgrad = value;
     }
 
     @Override

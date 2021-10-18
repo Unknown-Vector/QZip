@@ -53,6 +53,7 @@ public class Config {
             return this.readJson();
         } else {
             // Deserialize json
+            System.out.println("HHHHHH");
             return JsonUtil.deserializeObjectFromJsonFile(settingsPath, config);
         }
     }
@@ -145,8 +146,8 @@ public class Config {
         return this.adamSettings.isAmsgrad();
     }
 
-    public void setAmsgradTrue() {
-        this.adamSettings.setAmsgradTrue();
+    public void setAmsgrad(boolean value) {
+        this.adamSettings.setAmsgrad(value);
     }
 
     public AdamSettings getAdamSettings() {
