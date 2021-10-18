@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ui.primeq.optimizer.AdamSettings;
 
@@ -12,11 +13,11 @@ public class Config {
 
     private Path settingsPath = Paths.get("./config.json");
 
-    private int[] numVars = {5, 9, 14, 20, 27, 35, 44, 54, 65};
-    private int numLayers;
-    private int noOfTimes;
-    private int noPrimes;
-    private AdamSettings adamSettings;
+    protected int[] numVars = {5, 9, 14, 20, 27, 35, 44, 54, 65};
+    protected int numLayers;
+    protected int noOfTimes;
+    protected int noPrimes;
+    protected AdamSettings adamSettings;
 
     public Config() {}
 
@@ -25,16 +26,7 @@ public class Config {
             this.numLayers = numLayers;
             this.noOfTimes = noOfTimes;
             this.noPrimes = noPrimes;
-            Optional<Integer> opMaxIter = Optional.of(maxiter);
-            Optional<Double> opTol = Optional.of(tol);
-            Optional<Double> opLr = Optional.of(lr);
-            Optional<Double> opBeta1 = Optional.of(beta1);
-            Optional<Double> opBeta2 = Optional.of(beta2);
-            Optional<Double> opNoiseFactor = Optional.of(noiseFactor);
-            Optional<Double> opEps = Optional.of(eps);
-            Optional<Boolean> opAmsgrad = Optional.of(amsgrad);
-            this.adamSettings = new AdamSettings(opMaxIter.orElse(100), opTol.orElse(1e-6), opLr.orElse(0.001), opBeta1.orElse(0.9), 
-                opBeta2.orElse(0.99), opNoiseFactor.orElse(1e-8), opEps.orElse(1e-10), opAmsgrad.orElse(false));
+            setAdamSettings(maxiter, numLayers, noOfTimes, noPrimes, tol, lr, beta1, beta2, noiseFactor, eps, amsgrad);
     }
 
     public Config initConfig() throws IOException{
@@ -47,21 +39,28 @@ public class Config {
 
     private Config readJson() throws IOException{
         Config config = DefaultConfig();
+        System.out.println(config.toString());
         if(!Files.exists(this.settingsPath)) {
             // Create new json with default values
+            System.out.println("hi");
             JsonUtil.serializeObjectToJsonFile(settingsPath, config);
             return this.readJson();
         } else {
             // Deserialize json
-            System.out.println("HHHHHH");
             return JsonUtil.deserializeObjectFromJsonFile(settingsPath, config);
         }
+    }
+
+    public void setAdamSettings(int maxiter, int numLayers, int noOfTimes, int noPrimes, double tol, 
+        double lr, double beta1, double beta2, double noiseFactor, double eps, boolean amsgrad) {
+            this.adamSettings = new AdamSettings(maxiter, tol, lr, beta1, beta2, noiseFactor, eps, amsgrad);
     }
 
     public int[] getNumVars() {
         return this.numVars;
     }
-
+    
+    @JsonIgnore
     public int getMaxIter() {
         return this.adamSettings.getMaxIter();
     }
@@ -94,22 +93,25 @@ public class Config {
         this.noPrimes = noPrimes;
     }
 
+    @JsonIgnore
     public double getTol() {
         return this.adamSettings.getTol();
     }
-
+    
     public void setTol(double tol) {
         this.adamSettings.setTol(tol);
     }
 
+    @JsonIgnore
     public double getLr() {
         return this.adamSettings.getLr();
     }
-
+    
     public void setLr(double lr) {
         this.adamSettings.setLr(lr);
     }
 
+    @JsonIgnore
     public double getBeta1() {
         return this.adamSettings.getBeta1();
     }
@@ -118,6 +120,7 @@ public class Config {
         this.adamSettings.setBeta1(beta1);
     }
 
+    @JsonIgnore
     public double getBeta2() {
         return this.adamSettings.getBeta2();
     }
@@ -126,6 +129,7 @@ public class Config {
         this.adamSettings.setBeta2(beta2);
     }
 
+    @JsonIgnore
     public double getNoiseFactor() {
         return this.adamSettings.getNoiseFactor();
     }
@@ -134,6 +138,7 @@ public class Config {
         this.adamSettings.setNoiseFactor(noiseFactor);
     }
 
+    @JsonIgnore
     public double getEps() {
         return this.adamSettings.getEps();
     }
@@ -142,6 +147,7 @@ public class Config {
         this.adamSettings.setEps(eps);
     }
 
+    @JsonIgnore
     public boolean isAmsgrad() {
         return this.adamSettings.isAmsgrad();
     }
@@ -157,6 +163,7 @@ public class Config {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("numVars: " + this.numVars);
         sb.append("numLayers: " + this.numLayers);
         sb.append("noOfTimes: " + this.noOfTimes);
         sb.append("noPrimes: " + this.noPrimes);

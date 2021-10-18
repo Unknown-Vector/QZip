@@ -1,5 +1,7 @@
 package ui.primeq.optimizer;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class AdamSettings extends OptimizerSettings {
     private double tol;
     private double lr;
@@ -9,9 +11,7 @@ public class AdamSettings extends OptimizerSettings {
     private double eps;
     private boolean amsgrad;
 
-    public AdamSettings(){
-        super();
-    }
+    public AdamSettings(){}
 
     public AdamSettings(int maxiter, double tol, double lr, double beta1, double beta2, double noiseFactor, double eps, boolean amsgrad){
         super(maxiter);
@@ -24,6 +24,7 @@ public class AdamSettings extends OptimizerSettings {
         this.amsgrad = amsgrad;
     }
 
+    @JsonProperty(value = "tol")
     public double getTol() {
         return this.tol;
     }

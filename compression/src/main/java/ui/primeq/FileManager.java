@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 
 
 
@@ -19,15 +20,39 @@ public class FileManager {
 
     public void generateCompressedFile(String og_fileName, HashMap<Integer, String> unique_map, int[] data){
 		File file = new File(og_fileName + "Compressed.txt");
-        ArrayList<String> raw_data =  new ArrayList<>();
+        String bitString = new String("");
         for (int i = 0; i < data.length; i++) {
-            raw_data.add(unique_map.get(data[i]));
+            // Concat all data into 1 long bitstring
+            String dataString =  unique_map.get(data[i]);
+            if (dataString == null) {
+                dataString = "s0";
+            }
+            bitString = bitString.concat(dataString);
         }
+
+        for (int i = 8; i < bitString.length(); i += 9) {
+            bitString = this.addChar(bitString, "s", i);
+        }
+
+        String[] byteString = StringUtils.split(bitString, "s");
+        byte[] byteArray = new byte[byteString.length];
+        for (int i = 0; i < byteString.length; i++) {
+            while (byteString[i].length() < 8) {
+                byteString[i] = this.addChar(byteString[i], "0", 0);
+            }
+            Integer temp = (Integer.parseInt(byteString[i], 2));
+            byteArray[i] = temp.byteValue();
+        }
+        
         try{
-		    FileUtils.writeLines(file, raw_data, true);
+		    FileUtils.writeByteArrayToFile(file, byteArray, false);
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    private String addChar(String str, String ch, int position) {
+        return str.substring(0, position) + ch + str.substring(position);
     }
 
     private ArrayList<String> dataToString(ArrayList<ArrayList<Integer>> data){

@@ -18,21 +18,19 @@ public class App {
     public static void main( String[] args ) throws IOException {
         // for (String elem : args)
         //     System.out.println(elem);
+
+        //Initialize Config
+        Config config = new Config();
+        config = config.initConfig();
+
         // Initialize constants
-        int[] numVars = {5, 9, 14, 20, 27, 35, 44, 54, 65};
-        int numLayers = 5;
-        int noOfTimes = 1;
-        int noPrimes = 5;
+        int[] numVars = config.getNumVars();
         int n = 0;
         String nameOfFile = "sample";
         
         // Initialize Managers
         FileManager fileManager =  new FileManager();
-        FunctionManager functionManager = new FunctionManager(noPrimes);
-        
-        //Initialize Config
-        Config config = new Config();
-        config = config.initConfig();
+        FunctionManager functionManager = new FunctionManager(config.getNoPrimes());
 
         // Initialize Optimizer
         Adam opt = new Adam(config.getAdamSettings());
@@ -45,8 +43,6 @@ public class App {
         int[] data = fileManager.readFile("./" + nameOfFile + ".txt");
         int[] unique = Arrays.stream(data).distinct().toArray();
         System.out.println("Unique Values size = " + unique.length);
-        
-        
 
         int j = 0;
         int t = 0;
@@ -56,18 +52,18 @@ public class App {
             if(n != 0){
 
                 System.out.println("Running n = " + n + ":");
-                ZMatrixRMaj H = QuantumCircuitRunner.generateCircuitFiles(n, noPrimes, numLayers);
+                ZMatrixRMaj H = QuantumCircuitRunner.generateCircuitFiles(n, config.getNoPrimes(), config.getNumLayers());
                 double norm = NormOps_ZDRM.normF(H);
                 ZMatrixRMaj H_normalized = CommonOps_ZDRM.elementDivide(H, norm, 0, null);
 
-                while(t < noOfTimes){
+                while(t < config.getNoOfTimes()){
                     Random rand = new Random();
                     initialPoint.clear();
-                    for(int i = 0; i < (numVars[noPrimes - 2] * numLayers); i++){
+                    for(int i = 0; i < (numVars[config.getNoPrimes() - 2] * config.getNumLayers()); i++){
                         initialPoint.add( rand.nextDouble() * Math.PI);
                     }
 
-                    ArrayList<Double> params = opt.minimize(functionManager, initialPoint,  H_normalized, n, noPrimes, numLayers);
+                    ArrayList<Double> params = opt.minimize(functionManager, initialPoint,  H_normalized, n, config.getNoPrimes(), config.getNumLayers());
 
                     String loss = functionManager.objectivefunction(QuantumCircuitRunner.run(params), n);
                     // System.out.println(loss);
