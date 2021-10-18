@@ -1,2 +1,1 @@
-Hello World!
-Read txt file test.
+Read txt file test,it is currently 66 bytes

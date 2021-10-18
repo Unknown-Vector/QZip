@@ -32,15 +32,15 @@ def main(n, no_primes , no_layers):
         beta   = thetas_rshp[l][(len(circuit_primes) + len(combinations)) : lngth]
 
         for i in range(len(circuit_primes)):
-            Qcir.rz(gamma1[i] * 2 * ln(n / math.sqrt(root_arg)) * ln(circuit_primes[i]), i)
+            Qcir.rz(gamma1[i] * (2 * ln(n / math.sqrt(root_arg)) * ln(circuit_primes[i]) / (l+1)), i)
 
         i = 0
         for j,k in combinations:
-            Qcir.rzz(gamma2[i] * ln(circuit_primes[j]) * ln(circuit_primes[k]), j, k)
+            Qcir.rzz(gamma2[i] * (ln(circuit_primes[j]) * ln(circuit_primes[k]) / (l+1)), j, k)
             i+=1
 
         for m in range(len(circuit_primes)):
-            Qcir.rx(beta[m], m)
+            Qcir.rx(beta[m] * (1 / (l+1)) , m)
     
     with open('./compression/src/main/python/Qcir_current.qpy', 'wb') as fd:
         qpy_serialization.dump(Qcir, fd)

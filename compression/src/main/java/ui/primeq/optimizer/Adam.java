@@ -2,10 +2,16 @@ package ui.primeq.optimizer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Optional;
 import java.io.IOException;
 import java.util.stream.DoubleStream;
 import java.util.stream.Collectors;
+
+import org.apache.commons.math3.util.Combinations;
+import org.apache.commons.math3.analysis.function.Log;
+import org.apache.commons.math3.analysis.function.Sqrt;
+import org.ejml.data.ZMatrixRMaj;
 
 public class Adam implements Optimizer {
     AdamSettings adamSettings;
@@ -18,6 +24,9 @@ public class Adam implements Optimizer {
     double[] mTemp;
     double[] vTemp;
     double[] zeros;
+    Log ln;
+    Sqrt sqrt;
+    final int[] primes = {2,3,5,7,11,13,17,19,23,29,31};
     final int maxsize = 400; 
 
 
@@ -31,6 +40,8 @@ public class Adam implements Optimizer {
         // v = new ArrayList<>();
         // mTemp = new ArrayList<>();
         // vTemp = new ArrayList<>();
+        this.ln = new Log();
+        this.sqrt = new Sqrt();
 
         zeros = new double[maxsize];
         for(int i = 0; i < zeros.length; i++){
@@ -46,17 +57,24 @@ public class Adam implements Optimizer {
         return dictionary;
     }
 
-    public ArrayList<Double> minimize(FunctionManager functionManager, ArrayList<Double> initialPoint) throws IOException {
+    public ArrayList<Double> minimize(FunctionManager functionManager, ArrayList<Double> initialPoint, ZMatrixRMaj H, int n, int noPrimes, int numLayers) throws IOException {
         // //System.out.println(initialPoint);
         // //System.out.println(paramList);
+
+        //Generate circuit ceofficients
+        double[] cir_coeffs = this.generateCircuitCoeffs(n, noPrimes, numLayers);
+
         int param_size = initialPoint.size();
         // System.out.println(param_size);
         double[] params = initialPoint.stream().mapToDouble(Double::doubleValue).toArray();
         double[] paramsNew = Arrays.copyOf(params, param_size);
         
-        ArrayList<Double> derv = functionManager.gradientfunction(params);
+        double[] dx = functionManager.gradientfunction(params, H, cir_coeffs);
+        // for(int l = 0; l < dx.length; l++){
+        //     System.out.println("DX = " + dx[l]);
+        // }
         //System.out.println("derivative = " +  derv);
-        double[] dx = derv.stream().mapToDouble(Double::doubleValue).toArray();
+        // double[] dx = derv.stream().mapToDouble(Double::doubleValue).toArray();
         // //System.out.println(derivative);
         double t = 0;
         double beta1 = this.adamSettings.getBeta1();
@@ -107,8 +125,8 @@ public class Adam implements Optimizer {
                 // for(int i = 0; i < params.length; i++){
                 //     System.out.print("P = "+params[i]);
                 // }
-                ArrayList<Double> derivative = functionManager.gradientfunction(params);
-                dx = derivative.stream().mapToDouble(Double::doubleValue).toArray();
+                dx = functionManager.gradientfunction(params, H, cir_coeffs);
+                // dx = derivative.stream().mapToDouble(Double::doubleValue).toArray();
                 // //System.out.println("Gradients = " + derivative);
                 // //System.out.println("Params = " + params);
             } 
@@ -174,14 +192,49 @@ public class Adam implements Optimizer {
                 // params.addAll(paramsNew);
                 // //System.out.println(t + ":params2" + paramsNew);
                 params = Arrays.copyOf(paramsNew, param_size);
-                for(int i = 0; i < params.length; i++){
-                    //System.out.println("P = "+ paramsNew[i]);
-                }
+                // for(int i = 0; i < params.length; i++){
+                //     System.out.println("P = "+ paramsNew[i]);
+                // }
 
             }
         }
         ArrayList<Double> result =  DoubleStream.of(params).boxed().collect(Collectors.toCollection(ArrayList::new));
         return result;
+    }
+
+    private double[] generateCircuitCoeffs(int n, int noPrimes, int numLayers){
+        //generate circuit coeffs
+        int[] cir_primes =Arrays.copyOf(primes, noPrimes);
+        
+        int root_coeff = 1;
+        for(int p : cir_primes){
+            root_coeff *= p;
+        }
+        
+        ArrayList<Double> circuit_coeffs = new ArrayList<Double>();
+
+        for(int i = 0; i < numLayers; i++){
+            
+            for(int j = 0; j < noPrimes; j++){
+               double coeff = 2 * this.ln.value((n) / this.sqrt.value(root_coeff)) * this.ln.value(cir_primes[j]) / (i+1); 
+               circuit_coeffs.add(coeff);
+            }
+
+            Iterator<int[]> combinations = new Combinations(noPrimes, 2).iterator();
+            while(combinations.hasNext()){
+                int[] c  = combinations.next();
+                double comb_coeff = this.ln.value(cir_primes[c[0]]) * this.ln.value(cir_primes[c[1]]) / (i+1);
+                circuit_coeffs.add(comb_coeff);
+            }
+
+            for(int k = 0; k < noPrimes; k++){
+                circuit_coeffs.add(1.0 / (i+1));
+            }
+        }
+
+        double[] cir_coeffs = circuit_coeffs.stream().mapToDouble(Double::doubleValue).toArray();
+
+        return cir_coeffs;
     }
 
     public OptimizerSupportLevel gradientSupportLevel() {
@@ -230,4 +283,5 @@ public class Adam implements Optimizer {
     public boolean isInitialPointRequired() {
         return this.initialpointSupportLevel.equals(OptimizerSupportLevel.REQUIRED);
     }
+
 }
