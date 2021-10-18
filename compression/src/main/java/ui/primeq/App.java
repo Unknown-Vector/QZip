@@ -36,9 +36,9 @@ public class App {
 
         int[] unique = Arrays.stream(data_int).distinct().toArray();
         System.out.println("Unique Values size = " + unique.length);
-        for(int i = 0; i < unique.length; i++){
-            System.out.println(unique[i]);
-        }
+        // for(int i = 0; i < unique.length; i++){
+        //     System.out.println(unique[i]);
+        // }
 
 
         Adam opt = new Adam(maxiter, tol, lr, beta1, beta2, noiseFactor, eps, amsgrad);
