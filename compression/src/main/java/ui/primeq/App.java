@@ -21,12 +21,12 @@ public class App {
             System.out.println(elem);
         int maxiter = 1000;
         int[] numVars = {5, 9, 14, 20, 27, 35, 44, 54, 65};
-        int numLayers = 10;
+        int numLayers = 5;
         int noOfTimes = 1;
-        int noPrimes = 8;
+        int noPrimes = 5;
         int n = 0;
         Optional<Double> tol = Optional.of(1e-10);
-        Optional<Double> lr = Optional.of(0.01);
+        Optional<Double> lr = Optional.of(Math.PI / 1000);
         Optional<Double> beta1 = Optional.of(0.9);
         Optional<Double> beta2 = Optional.of(0.99);
         Optional<Double> noiseFactor = Optional.of(1e-7);
@@ -39,20 +39,21 @@ public class App {
 
         int len = data.length;
         ByteBuffer bytebuf;
-        if(data.length % 2 != 0){
-            byte[] data_temp = new byte[data.length + 1];
-            System.arraycopy(data, 0, data_temp, 0, data.length);
-            bytebuf = ByteBuffer.wrap(data_temp);
-            len ++;
-        }else{
+        // if(data.length % 2 != 0){
+        //     byte[] data_temp = new byte[data.length + 1];
+        //     System.arraycopy(data, 0, data_temp, 0, data.length);
+        //     bytebuf = ByteBuffer.wrap(data_temp);
+        //     len ++;
+        // }else{
             bytebuf = ByteBuffer.wrap(data);
-        }
+        // }
         
         int[] data_int = new int[len];
 
         int k = 0;
         while(bytebuf.remaining() > 0){          
-            char x = bytebuf.getChar();
+            Byte x = bytebuf.get();
+            // String b = x.toString();
             System.out.println((int) x);
             data_int[k] = (int) x;
             k++;

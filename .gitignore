@@ -13,4 +13,4 @@ buildNumber.properties
 /compression/.classpath
 /compression/.project
 /compression/.settings
-
+/compression/src/main/python/*.qpy
