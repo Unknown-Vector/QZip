@@ -10,4 +10,8 @@ public class OptimizerSettings {
     public int getMaxIter() {
         return maxiter;
     }
+
+    public void setMaxIter(int maxiter) {
+        this.maxiter = maxiter;
+    }
 }

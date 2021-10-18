@@ -24,27 +24,69 @@ public class AdamSettings extends OptimizerSettings {
         return this.tol;
     }
 
+    public void setTol(double tol) {
+        this.tol = tol;
+    }
+
     public double getLr() {
         return this.lr;
+    }
+
+    public void setLr(double lr) {
+        this.lr = lr;
     }
 
     public double getBeta1() {
         return this.beta1;
     }
 
+    public void setBeta1(double beta1) {
+        this.beta1 = beta1;
+    }
+
     public double getBeta2() {
         return this.beta2;
+    }
+
+    public void setBeta2(double beta2) {
+        this.beta2 = beta2;
     }
 
     public double getNoiseFactor() {
         return this.noiseFactor;
     }
 
+    public void setNoiseFactor(double noiseFactor) {
+        this.noiseFactor = noiseFactor;
+    }
+
     public double getEps() {
         return this.eps;
     }
 
+    public void setEps(double eps) {
+        this.eps = eps;
+    }
+
     public boolean isAmsgrad() {
         return this.amsgrad;
+    }
+
+    public void setAmsgradTrue() {
+        this.amsgrad = true;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("maxiter: " + super.getMaxIter());
+        sb.append("tol: " + this.tol);
+        sb.append("lr: " + this.lr);
+        sb.append("beta1: " + this.beta1);
+        sb.append("beta2: " + this.beta2);
+        sb.append("noisefactor" + this.noiseFactor);
+        sb.append("eps: " + this.eps);
+        sb.append("amsgrad: " + this.amsgrad);
+        return sb.toString();
     }
 }
