@@ -20,9 +20,9 @@ public class App {
         //     System.out.println(elem);
         // Initialize constants
         int[] numVars = {5, 9, 14, 20, 27, 35, 44, 54, 65};
-        int numLayers = 10;
+        int numLayers = 5;
         int noOfTimes = 1;
-        int noPrimes = 8;
+        int noPrimes = 5;
         int n = 0;
         String nameOfFile = "sample";
         
