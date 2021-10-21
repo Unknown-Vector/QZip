@@ -11,6 +11,11 @@ import ui.primeq.optimizer.AdamSettings;
 
 public class Config {
 
+    public static final int MAXREMAINDERS = 15;
+    public static final int MAXPRIMES = 10;
+    public static final int MAXREMAINDER = 15;
+    public static final int[] primes = {2,3,5,7,11,13,17,19,23,29,31};
+
     private Path settingsPath = Paths.get("./config.json");
 
     protected int[] numVars = {5, 9, 14, 20, 27, 35, 44, 54, 65};
@@ -39,10 +44,8 @@ public class Config {
 
     private Config readJson() throws IOException{
         Config config = DefaultConfig();
-        System.out.println(config.toString());
         if(!Files.exists(this.settingsPath)) {
             // Create new json with default values
-            System.out.println("hi");
             JsonUtil.serializeObjectToJsonFile(settingsPath, config);
             return this.readJson();
         } else {
@@ -59,7 +62,7 @@ public class Config {
     public int[] getNumVars() {
         return this.numVars;
     }
-    
+
     @JsonIgnore
     public int getMaxIter() {
         return this.adamSettings.getMaxIter();

@@ -1,16 +1,16 @@
 {
   "numVars" : [ 5, 9, 14, 20, 27, 35, 44, 54, 65 ],
-  "numLayers" : 1,
+  "numLayers" : 10,
   "noOfTimes" : 1,
-  "noPrimes" : 9,
+  "noPrimes" : 8,
   "adamSettings" : {
-    "lr" : 0.001,
+    "lr" : 0.01,
     "beta1" : 0.9,
     "beta2" : 0.99,
-    "noiseFactor" : 1.0E-8,
-    "eps" : 1.0E-10,
+    "noiseFactor" : 1.0E-6,
+    "eps" : 1.0E-6,
     "amsgrad" : false,
-    "maxIter" : 1000,
-    "tol" : 1.0E-6
+    "maxIter" : 300,
+    "tol" : 1.0E-10
   }
 }
