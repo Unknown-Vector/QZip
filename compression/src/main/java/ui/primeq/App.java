@@ -20,10 +20,10 @@ public class App {
         
         // Initialize Managers
         FileManager fileManager =  new FileManager();
-        FunctionManager functionManager = new FunctionManager(config.getNoPrimes());
+        FunctionManager functionManager = new FunctionManager(config);
 
         // Initialize Optimizer
-        Adam opt = new Adam(config.getAdamSettings());
+        Adam opt = new Adam(config);
 
         // Initialize ArrayList & HashMap to contain compressed integers and remainder list
         ArrayList<Integer> remainders = new ArrayList<>();

@@ -35,8 +35,8 @@ public class Adam implements Optimizer {
     private static int maxsize = 400; 
 
 
-    public Adam(AdamSettings adamSettings){
-        this.adamSettings = adamSettings;
+    public Adam(Config config){
+        this.adamSettings = config.getAdamSettings();
         this.gradientSupportLevel = OptimizerSupportLevel.SUPPORTED;
         this.boundsSupportLevel = OptimizerSupportLevel.IGNORED;
         this.initialpointSupportLevel = OptimizerSupportLevel.SUPPORTED;
@@ -175,7 +175,7 @@ public class Adam implements Optimizer {
         int[] numVars = config.getNumVars();
         int[] unique = Arrays.stream(data).distinct().toArray();
         System.out.println("Unique Values size = " + unique.length);
-        
+
         ArrayList<Double> initialPoint =  new ArrayList<>();
         HashMap<Integer, String> unique_map =  new HashMap<>();
 

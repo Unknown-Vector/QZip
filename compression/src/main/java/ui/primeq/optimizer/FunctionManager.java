@@ -11,14 +11,15 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.ejml.data.ZMatrixRMaj;
 
 import ui.primeq.QuantumCircuitRunner;
+import ui.primeq.config.Config;
 
 public class FunctionManager {
     private int[] primes = {2,3,5,7,11,13,17,19,23,29,31};
     private int no_primes = 0;
 
 
-    public FunctionManager(int no_primes) {
-        this.no_primes = no_primes;
+    public FunctionManager(Config config) {
+        this.no_primes = config.getNoPrimes();
     }
 
     public double[] gradientfunction(double[] parameters, ZMatrixRMaj H, double[] cir_coeffs) throws IOException {
