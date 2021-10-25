@@ -72,8 +72,20 @@ public class Config {
         return this.nameOfFile;
     }
 
+    public void setNameOfFile(String nameOfFile) {
+        this.nameOfFile = nameOfFile;
+    }
+
     public String getFileFormat() {
         return this.fileFormat;
+    }
+
+    public void setFileFormat(String fileFormat) {
+        this.fileFormat = fileFormat;
+    }
+
+    public Path getSettingsPath() {
+        return this.settingsPath;
     }
 
     @JsonIgnore

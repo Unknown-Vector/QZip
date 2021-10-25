@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import ui.primeq.config.Config;
 import ui.primeq.logic.Logic;
+import ui.primeq.logic.commands.CommandList;
 import ui.primeq.model.Model;
 import ui.primeq.storage.Storage;
 
@@ -28,14 +29,21 @@ public class App {
         
         while (true){
             System.out.println("Enter Command");
-            String command = scanner.nextLine().strip().toUpperCase();
-            while (!command.equals(Logic.COMPRESSCOMMAND) && !command.equals(Logic.DECOMPRESSCOMMAND)
-                && !command.equals(Logic.EXITCOMMAND)) {
+            String commandString = scanner.nextLine();
+            String[] command = commandString.split(" ");
+            String commandWord = command[0].strip().toUpperCase();
+            while (!CommandList.commandFound(commandWord)) {
                 System.out.println("Please key in correct command.");
-                System.out.println("Command Entered: " + command);
-                command = scanner.nextLine().strip().toUpperCase();
+                System.out.println("Command Entered: " + commandWord);
+                commandString = scanner.nextLine();
+                command = commandString.split(" ");
+                commandWord = command[0].strip().toUpperCase();
             }
-            logic.execute(command);
+            if (command.length == 1) {
+                logic.execute(command[0].toUpperCase().strip(), " ");
+            } else {
+                logic.execute(command[0].toUpperCase().strip(), command[1].strip());
+            }
         }
     }
 }

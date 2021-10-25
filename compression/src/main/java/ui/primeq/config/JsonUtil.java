@@ -13,7 +13,7 @@ public class JsonUtil {
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
-    static void serializeObjectToJsonFile(Path jsonFile, Config config) throws IOException{
+    public static void serializeObjectToJsonFile(Path jsonFile, Config config) throws IOException{
         Files.write(jsonFile, toJsonString(config).getBytes(CHARSET));
     }
 
@@ -21,7 +21,7 @@ public class JsonUtil {
         return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(instance);
     }
 
-    static Config deserializeObjectFromJsonFile(Path jsonFile, Config classOfObjectToDeserialize)
+    public static Config deserializeObjectFromJsonFile(Path jsonFile, Config classOfObjectToDeserialize)
             throws IOException {
         return fromJsonString(readFromFile(jsonFile), classOfObjectToDeserialize);
     }
