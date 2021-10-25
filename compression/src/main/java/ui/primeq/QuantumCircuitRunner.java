@@ -9,11 +9,8 @@ import java.util.HashMap;
 import java.util.regex.*;
 import java.io.File;
 
-import org.apache.commons.math3.geometry.partitioning.Side;
 import org.ejml.data.Complex_F64;
-import org.ejml.data.DMatrixRMaj;
 import org.ejml.data.ZMatrixRMaj;
-import org.ejml.dense.row.CommonOps_DDRM;
 import org.ejml.dense.row.CommonOps_ZDRM;
 import org.ejml.ops.ComplexMath_F64;
 
@@ -27,19 +24,6 @@ public class QuantumCircuitRunner {
         }
         return listString;
     }
-    // DEPRECATED: NOT IN USE ANYMORE!
-    // private static ArrayList<Double> refineGradientResults(String results){
-    //     ArrayList<Double> gradient_list = new ArrayList<Double>();
-    //     Pattern MY_PATTERN = Pattern.compile("\\[(.*?)\\]");
-
-    //     // Extract graidents from result string
-    //     String [] result_gradients = (results.replaceAll("\\[|\\]", "").trim()).split("\\s+");
-    //     for(int i = 0; i < result_gradients.length; i++){
-    //         gradient_list.add(Double.valueOf(result_gradients[i]));
-    //     }
-        
-    //     return gradient_list;
-    // }
 
     private static ArrayList<ArrayList<ZMatrixRMaj>> refineStatevectorResults(String results){
         ArrayList<ArrayList<ZMatrixRMaj>> statvector_list = new ArrayList<>();
@@ -74,7 +58,6 @@ public class QuantumCircuitRunner {
     }
 
     private static double[] refineHamiltonianResults(String results){
-         // Extract Diagonals from result string
         String [] result_gradients = (results.replaceAll("\\[|\\]", "").trim()).split("\\s+");
         double [] hamiltonian_diagonals = new double[result_gradients.length * 2];
 
@@ -89,7 +72,6 @@ public class QuantumCircuitRunner {
     public static void flush(){
         File python_resource = new File("compression/src/main/python/Qcir_current.qpy"); 
         if (python_resource.delete()) { 
-                //System.out.println("Flushed :  " + python_resource.getName());
         } else {
                 System.out.println("Failed to delete Circuit file.");
         }
@@ -99,7 +81,8 @@ public class QuantumCircuitRunner {
         final String CircuitFile = "./compression/src/main/python/generate_qpy_circuit.py";
         final String HamilFile = System.getProperty("user.dir") + "/compression/src/main/python/generate_OpMatrix.py";
         String diagonals = "";
-        // Please optimize this process with multithreading later!
+
+        // TODO: Change to multiprocessing if possible, currently uses python multiprocessing
         try{
             String[] cmd = new String[3];
             cmd[0] = "python";
@@ -112,14 +95,11 @@ public class QuantumCircuitRunner {
             
             BufferedReader out = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while((o = out.readLine()) != null){
-                //System.out.println(o);
                 diagonals += o;
             }
         } catch(Exception e){
-            //System.out.println(e.toString());
             e.printStackTrace();
         }
-        // System.out.println(diagonals);
 
         try{
             String[] cmd = new String[3];
@@ -133,16 +113,12 @@ public class QuantumCircuitRunner {
             String o = "";
             
             BufferedReader out = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while((o = out.readLine()) != null){
-                //System.out.println(o);
-            }
+            while((o = out.readLine()) != null){}
         } catch(Exception e){
-            //System.out.println(e.toString());
             e.printStackTrace();
         }
 
         double[] h = refineHamiltonianResults(diagonals);
-        // double[] x = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6};
         ZMatrixRMaj Hamiltonian = CommonOps_ZDRM.diag(h);
         System.out.println("Generated Hamiltonian and Circuit Files...");
         return Hamiltonian;
@@ -150,10 +126,7 @@ public class QuantumCircuitRunner {
 
     public static double[] Gradients(ArrayList<Double> input, ZMatrixRMaj H, double[] cir_coeffs) throws IOException{
         double[] graidents = new double[input.size()];
-        // long startTime = System.nanoTime();
         ArrayList<ArrayList<ZMatrixRMaj>> statvectors = stateVectors(input);
-        // long endTime = System.nanoTime();
-        // long duration = (endTime - startTime);
 
         assert(statvectors.size() == 2 && statvectors.get(0).size() == cir_coeffs.length && cir_coeffs.length == statvectors.get(1).size());
      
@@ -186,10 +159,7 @@ public class QuantumCircuitRunner {
             obserMpi.get(0, 0, m_PI);
 
             ComplexMath_F64.minus(p_PI, m_PI, diff);
-            // System.out.println("Diff = " + diff.toString());
             double grad = cir_coeffs[i] * 0.5 * diff.real;
-            // System.out.println("Gradient = " + grad);
-
             graidents[i] = (double) grad;
         }
 
@@ -199,9 +169,8 @@ public class QuantumCircuitRunner {
     public static  ArrayList<ArrayList<ZMatrixRMaj>> stateVectors(ArrayList<Double> input) throws IOException{
         final String svFile = System.getProperty("user.dir") + "/compression/src/main/python/quantum_statevector.py";
         String var = stringify(input);
-        // System.out.println(var);
         String states = "";
-        // long startTime = System.nanoTime();
+
         try{
             String[] cmd = new String[3];
             cmd[0] = "python";
@@ -221,9 +190,6 @@ public class QuantumCircuitRunner {
         } catch(Exception e){
             e.printStackTrace();
         }
-        // long endTime = System.nanoTime();
-        // long duration = (endTime - startTime);
-        // System.out.println(states);
 
         return refineStatevectorResults(states);
     }
@@ -231,7 +197,6 @@ public class QuantumCircuitRunner {
     private static HashMap<String, Integer> refineCircuitResults(String results){
         HashMap<String, Integer> dict = new HashMap<String, Integer>();
 
-        // Extract counts from result string
         String results_counts = results.replaceAll("[{}]", "");
         String[] res_array = results_counts.split(",");
         
@@ -246,9 +211,7 @@ public class QuantumCircuitRunner {
 
     public static HashMap<String, Integer> run(ArrayList<Double> input) throws IOException{
         final String circuitFile = System.getProperty("user.dir") + "/compression/src/main/python/quantum_circuit_run.py";
-        String var = stringify(input);
-        
-        // Clear all previous results for new results
+        String var = stringify(input);       
         String output = "";
     
         try{
@@ -266,7 +229,6 @@ public class QuantumCircuitRunner {
                 output += o;
             }
         } catch(Exception e){
-            //System.out.println(e.toString());
             e.printStackTrace();
         }
         
