@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import ui.primeq.FileManager;
+import ui.primeq.config.Config;
 
 public class Storage {
 
     private int[] data;
     private HashMap<Integer, String> uniqueMap;
     private ArrayList<Integer> remainders;
-    private String nameOfFile;
     
     public Storage() throws IOException{
         this.data = new int[10];
@@ -19,14 +19,11 @@ public class Storage {
         this.remainders = new ArrayList<>();
     }
 
-    public void readData(String nameOfFile, String fileFormat) throws IOException{
+    public void readData(Config config) throws IOException{
+        String nameOfFile = config.getNameOfFile();
+        String fileFormat = config.getFileFormat();
         FileManager fileManager = new FileManager();
-        this.nameOfFile = nameOfFile;
-        this.data = fileManager.readFile("./" + this.nameOfFile + fileFormat);
-    }
-
-    public String getFileName() {
-        return this.nameOfFile;
+        this.data = fileManager.readFile("./" + nameOfFile + fileFormat);
     }
 
     public int[] getData() {

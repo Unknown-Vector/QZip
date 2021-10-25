@@ -28,14 +28,14 @@ public class FileManager {
 
     public void generateCompressedFile(Config config, Storage storage) throws IOException{
         
-        String fileName = storage.getFileName();
+        String fileName = config.getNameOfFile();
         HashMap<Integer, String> uniqueMap = storage.getUniqueMap();
         int[] data = storage.getData();
         ArrayList<Integer> remainders = storage.getRemainders();
 
 
         int noPrimes = config.getNoPrimes();
-		File file = new File(fileName + "Compressed.txt");
+		File file = new File(fileName + "Compressed" + config.getFileFormat());
         String bitString = new String("");
         
         Collections.sort(remainders, Collections.reverseOrder());
@@ -178,7 +178,7 @@ public class FileManager {
         }
         
         byte[] decompressedData = expandData(dataArray);
-        File file = new File(filePath.substring(0, filePath.length()-4) + "DeCompressed.txt");
+        File file = new File(filePath.substring(0, filePath.length()-14) + "DeCompressed.txt");
 
         try{
             FileOutputStream fos = new FileOutputStream(file);
