@@ -246,6 +246,8 @@ public class Adam implements Optimizer {
         
         int[] numVars = config.getNumVars();
         int[] unique = Arrays.stream(data).distinct().toArray();
+        System.out.println("Unique Values size = " + unique.length);
+        
         ArrayList<Double> initialPoint =  new ArrayList<>();
         HashMap<Integer, String> unique_map =  new HashMap<>();
 
