@@ -1,5 +1,4 @@
 {
-  "settingsPath" : "file:///C:/Users/Sam_Y/Desktop/Work%20Files/PrimeQ/./config.json",
   "numVars" : [ 5, 9, 14, 20, 27, 35, 44, 54, 65 ],
   "numLayers" : 1,
   "noOfTimes" : 1,
@@ -14,6 +13,6 @@
     "maxIter" : 100,
     "tol" : 1.0E-6
   },
-  "nameOfFile" : "sample1",
+  "nameOfFile" : "sample",
   "fileFormat" : ".txt"
 }

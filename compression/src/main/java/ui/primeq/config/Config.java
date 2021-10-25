@@ -84,6 +84,7 @@ public class Config {
         this.fileFormat = fileFormat;
     }
 
+    @JsonIgnore
     public Path getSettingsPath() {
         return this.settingsPath;
     }

@@ -121,8 +121,13 @@ public class FileManager {
     }
 
     private byte[] readQzipFile(String filePath) throws IOException{
-        File datafile = new File(filePath);
-        byte[] data = Files.readAllBytes(datafile.toPath());
+        byte[] data = {0};
+        try {
+            File datafile = new File(filePath);
+            data = Files.readAllBytes(datafile.toPath());
+        } catch (IOException e){
+            e.printStackTrace();
+        }      
         return data;
     }
 
