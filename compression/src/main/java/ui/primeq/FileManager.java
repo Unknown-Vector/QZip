@@ -142,7 +142,7 @@ public class FileManager {
         int k = 0;
         while(bytebuf.remaining() > 0){          
             char x = bytebuf.getChar();
-            // // System.out.println((int) x);
+            System.out.println((int) x);
             data_int[k] = (int) x;
             k++;
         }
@@ -192,18 +192,25 @@ public class FileManager {
         }
 
         String dataString = data_str.substring(getNoOfBits(NUMBEROFBITSPRIME) + getNoOfBits(NUMBEROFBITSREMAINDER) + getNoOfBits(NUMBEROFBITSREMAINDERS) + dict_chunk);
+        System.out.println("dataChuncks: " + dataString.length());
         int dataBits = noPrimes + 1 + getNoOfBits(remainderSize);
         // System.out.println("dataBits " + dataBits);
         int[] dataArray = new int[dataString.length() / dataBits];
         for(int i=0; i < dataArray.length; i++) {
             String temp = dataString.substring(i * dataBits, (i+1) * dataBits);
+            System.out.println("tempsub " + temp);
             int index = Integer.parseInt(temp, noPrimes + 1, dataBits, 2);
-            // System.out.println("remainder " + remainderArray[index]);
+
+            if(i == dataArray.length-1 & index == 0){
+                index = Integer.parseInt(dataString, (i+1) * dataBits, dataString.length(), 2);
+            }
             temp = (temp.substring(0, noPrimes+1)).concat(remainderArray[index]);
-            // System.out.println("tempsub " + temp.substring(0, noPrimes+1));
             // System.out.println("temp " + temp);
             System.out.println(i);
-            dataArray[i] = processDataChunk(temp, noPrimes);
+            int res = processDataChunk(temp, noPrimes);
+            System.out.println(res);
+            System.out.println();
+            dataArray[i] = res;
         }
         
         byte[] decompressedData = expandData(dataArray);
@@ -233,19 +240,21 @@ public class FileManager {
 
     private int processDataChunk(String data, int noPrimes) {
         System.out.println(data);
-        System.out.println(data.substring(0, noPrimes));
+        System.out.println("Prime String = " + data.substring(0, noPrimes));
         String primes = data.substring(0, noPrimes);
         System.out.println(data.substring(noPrimes+1));
         int remainder = Integer.parseInt(data, noPrimes+1, data.length(),2);
+        System.out.println("Remainder = " + remainder);
         int result = 1;
-
+        primes = new StringBuilder(primes).reverse().toString();
         for (int i = 0; i < primes.length(); i++) {
-            if (primes.charAt(i) == (char) 1) {
+            if (primes.charAt(i) == '1') {
                 result *= Config.primes[i];
             }
         }
+        System.out.println("Composite No :" + result);
 
-        if (data.charAt(noPrimes + 1) != (char) 1) {
+        if (data.charAt(noPrimes) != '1') {
             return result += remainder;
         } else {
             return result -= remainder;
