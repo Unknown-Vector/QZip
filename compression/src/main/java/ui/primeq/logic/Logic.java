@@ -2,13 +2,17 @@ package ui.primeq.logic;
 
 import java.io.IOException;
 
+import ui.primeq.logic.commands.CompressCommand;
+import ui.primeq.logic.commands.DecompressCommand;
+import ui.primeq.logic.commands.ExitCommand;
 import ui.primeq.model.Model;
 import ui.primeq.storage.Storage;
 
 public class Logic {
 
-    private static final String COMPRESSCOMMAND = "compress";
-    private static final String DECOMPRESSCOMMAND = "decompress";
+    public static final String COMPRESSCOMMAND = "COMPRESS";
+    public static final String DECOMPRESSCOMMAND = "DECOMPRESS";
+    public static final String EXITCOMMAND = "EXIT";
 
     private final Storage storage;
     private final Model model;
@@ -20,11 +24,11 @@ public class Logic {
 
     public void execute(String command) throws IOException{
         if (command.equals(COMPRESSCOMMAND)) {
-            storage.readData(model.getConfig());
-            model.getOptimizer().processUniqueValues(model.getConfig(), model.getFunctionManager(), storage);
-            model.getFileManager().generateCompressedFile(model.getConfig(), storage);
+            CompressCommand.execute(this.model, this.storage);
         } else if (command.equals(DECOMPRESSCOMMAND)) {
-            model.getFileManager().decompress(model.getConfig().getNameOfFile() + "Compressed" + model.getConfig().getFileFormat());
+            DecompressCommand.execute(this.model);
+        } else if (command.equals(EXITCOMMAND)) {
+            ExitCommand.execute();
         }
     }
 }

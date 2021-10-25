@@ -11,17 +11,6 @@ import ui.primeq.storage.Storage;
 public class App {
     public static void main( String[] args ) throws IOException {
 
-        System.out.println("1. Compress or 2. Decompress");
-
-        Scanner scanner = new Scanner(System.in);
-        String command = scanner.nextLine().strip().toLowerCase();
-        while (!command.equals("compress") && !command.equals("decompress")) {
-            System.out.println("Please key in correct command.");
-            System.out.println("Command Entered: " + command);
-            command = scanner.nextLine().strip().toLowerCase();
-        }
-        scanner.close();
-
         // Initialize Config
         Config config = new Config();
         config = config.initConfig();
@@ -34,7 +23,19 @@ public class App {
 
         // Initialize Logic
         Logic logic = new Logic(storage, model);
-
-        logic.execute(command);
+        // Initialize Scanner
+        Scanner scanner = new Scanner(System.in);
+        
+        while (true){
+            System.out.println("Enter Command");
+            String command = scanner.nextLine().strip().toUpperCase();
+            while (!command.equals(Logic.COMPRESSCOMMAND) && !command.equals(Logic.DECOMPRESSCOMMAND)
+                && !command.equals(Logic.EXITCOMMAND)) {
+                System.out.println("Please key in correct command.");
+                System.out.println("Command Entered: " + command);
+                command = scanner.nextLine().strip().toUpperCase();
+            }
+            logic.execute(command);
+        }
     }
 }
