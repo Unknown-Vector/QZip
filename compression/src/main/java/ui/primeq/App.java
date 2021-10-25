@@ -2,7 +2,6 @@ package ui.primeq;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import ui.primeq.config.Config;

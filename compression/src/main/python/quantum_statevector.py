@@ -4,7 +4,6 @@ from copy import deepcopy
 from numpy import round
 from numpy import pi as PI
 from qiskit.circuit import qpy_serialization
-import timeit
 ## For Multiprocessing
 import multiprocessing
 
@@ -19,7 +18,6 @@ def stateVectorForj(j, shift, hyperparams, quantum_circuit):
     p_dict = {free_params[i] : hyperparams[i] for i in range(len(free_params))}
     cir.assign_parameters(p_dict, inplace=True)
 
-            # cir.save_statevector()
     result = sim.run(cir).result()
     sv = round(result.get_statevector(cir), 10) # round to 15 decimal places
     vec = [(float(c.real), float(c.imag)) for c in sv]
@@ -37,8 +35,6 @@ def main(arg):
         pool = multiprocessing.Pool(processes = 15)
         stateIter = [(i, shift, hyperparams, quantum_circuit,) for i in range(len(hyperparams))]
         vec = pool.starmap(stateVectorForj, stateIter)
-        # for j in range(len(hyperparams)):
-        #     vec = stateVectorForj(j, shift, hyperparams, quantum_circuit)
         statevec.append(vec)
     
     print(statevec)

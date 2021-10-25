@@ -19,7 +19,6 @@ def main(arg):
     cir.assign_parameters(p_dict, inplace=True)
     cir.measure_all()
     backend = Aer.get_backend('aer_simulator')
-    # backend.set_options(device='GPU') #DO not use for now until dependencies have been solved
     job_sim = execute(cir, backend = backend, shots = 2048).result()
     counts = job_sim.get_counts(cir)
 

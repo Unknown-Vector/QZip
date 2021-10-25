@@ -3,11 +3,6 @@ from qiskit.opflow import I, Z
 from numpy import log as ln
 from numpy import save
 from numpy import diagonal, round, real
-import pickle
-
-def save_obj(obj, name ):
-    with open(name + '.pkl', 'wb') as f:
-        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
 
 def X_generator(primes, identity):
     #Generate X value for hamiltonian
@@ -57,11 +52,8 @@ def main(n, no_primes):
 
     ham = hamiltonian(n, primes)
     Ham_matrix = ham.to_matrix()
-    # save("compression/src/main/python/Hamiltonian.npy", Ham_matrix)
-    # save_obj(Ham_matrix,"compression/src/main/python/Hamiltonian")
-    print(round(diagonal(real(Ham_matrix)), 15))
-    # print("Generated Hamiltonian File......")
-
+    print(round(diagonal(real(Ham_matrix)), 10))
+    
 
 if __name__ == "__main__":
     input = sys.argv[1].split(" ")
