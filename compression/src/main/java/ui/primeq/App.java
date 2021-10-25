@@ -2,7 +2,6 @@ package ui.primeq;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import ui.primeq.config.Config;
@@ -37,6 +36,6 @@ public class App {
         unique_map = opt.processUniqueValues(config, data, functionManager, remainders);
 
         // Generate Compressed file with unique map from Optimizer
-        fileManager.generateCompressedFile(config.getNoPrimes(), nameOfFile, unique_map, data, remainders);
+        fileManager.generateCompressedFile(config, nameOfFile, unique_map, data, remainders);
     }
 }

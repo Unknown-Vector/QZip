@@ -27,8 +27,9 @@ public class FileManager {
     
     public FileManager(){}
 
-    public void generateCompressedFile(int noPrimes, String og_fileName, HashMap<Integer, String> unique_map, 
+    public void generateCompressedFile(Config config, String og_fileName, HashMap<Integer, String> unique_map, 
         int[] data, ArrayList<Integer> remainders) throws IOException{
+        int noPrimes = config.getNoPrimes();
 		File file = new File(og_fileName + "Compressed.txt");
         String bitString = new String("");
         // System.out.println(remainders);
