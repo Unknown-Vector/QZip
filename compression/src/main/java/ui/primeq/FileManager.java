@@ -14,6 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import ui.primeq.config.Config;
+import ui.primeq.storage.Storage;
 
 
 
@@ -25,16 +26,22 @@ public class FileManager {
     
     public FileManager(){}
 
-    public void generateCompressedFile(Config config, String og_fileName, HashMap<Integer, String> unique_map, 
-        int[] data, ArrayList<Integer> remainders) throws IOException{
+    public void generateCompressedFile(Config config, Storage storage) throws IOException{
+        
+        String fileName = storage.getFileName();
+        HashMap<Integer, String> uniqueMap = storage.getUniqueMap();
+        int[] data = storage.getData();
+        ArrayList<Integer> remainders = storage.getRemainders();
+
+
         int noPrimes = config.getNoPrimes();
-		File file = new File(og_fileName + "Compressed.txt");
+		File file = new File(fileName + "Compressed.txt");
         String bitString = new String("");
         
         Collections.sort(remainders, Collections.reverseOrder());
     
         for (int i = 0; i < data.length; i++) {
-            String dataString =  unique_map.get(data[i]);
+            String dataString =  uniqueMap.get(data[i]);
             if (dataString == null) {
                 dataString = "s0";
             } else {
@@ -113,13 +120,13 @@ public class FileManager {
         return data_int;
     }
 
-    public byte[] readQzipFile(String filePath) throws IOException{
+    private byte[] readQzipFile(String filePath) throws IOException{
         File datafile = new File(filePath);
         byte[] data = Files.readAllBytes(datafile.toPath());
         return data;
     }
 
-    public String processByteArrayToString(byte[] byteArray) {
+    private String processByteArrayToString(byte[] byteArray) {
         ByteBuffer buffer = ByteBuffer.wrap(byteArray);
         String data_string = "";
 
@@ -130,6 +137,7 @@ public class FileManager {
 
         return data_string;
     }
+
     public void decompress(String filePath) throws IOException{
         byte[] data = readQzipFile(filePath);
         String data_str = processByteArrayToString(data);
@@ -160,6 +168,8 @@ public class FileManager {
             int index = Integer.parseInt(temp, noPrimes + 1, dataBits, 2);
 
             if(i == dataArray.length-1 & index == 0){
+                System.out.println(dataArray.length);
+                System.out.println(dataString.substring((i+1) * dataBits, dataString.length()));
                 index = Integer.parseInt(dataString, (i+1) * dataBits, dataString.length(), 2);
             }
             temp = (temp.substring(0, noPrimes+1)).concat(remainderArray[index]);

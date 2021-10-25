@@ -1,12 +1,11 @@
 package ui.primeq;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import ui.primeq.config.Config;
 import ui.primeq.optimizer.Adam;
 import ui.primeq.optimizer.FunctionManager;
+import ui.primeq.storage.Storage;
 
 public class App {
     public static void main( String[] args ) throws IOException {
@@ -17,25 +16,37 @@ public class App {
 
         // Initialize constants
         String nameOfFile = "sample";
+        String fileFormat = ".txt";
         
         // Initialize Managers
         FileManager fileManager =  new FileManager();
         FunctionManager functionManager = new FunctionManager(config);
 
+        // Initialize Storage
+        Storage storage = new Storage();
+
         // Initialize Optimizer
         Adam opt = new Adam(config);
 
-        // Initialize ArrayList & HashMap to contain compressed integers and remainder list
-        ArrayList<Integer> remainders = new ArrayList<>();
-        HashMap<Integer, String> unique_map =  new HashMap<>();
-
         // Convert File into int array to be processed
-        int[] data = fileManager.readFile("./" + nameOfFile + ".txt");
+        storage.readData(nameOfFile, fileFormat);
 
         // Process Unique Values with Optimizer
-        unique_map = opt.processUniqueValues(config, data, functionManager, remainders);
+        opt.processUniqueValues(config, functionManager, storage);
 
-        // Generate Compressed file with unique map from Optimizer
-        fileManager.generateCompressedFile(config, nameOfFile, unique_map, data, remainders);
+        System.out.println("filename: " + storage.getFileName());
+        for (int remainder : storage.getRemainders()) {
+            System.out.println("remainder: " + remainder);
+        }
+
+        for (int key : storage.getUniqueMap().keySet()) {
+            System.out.println(key + ": " + storage.getUniqueMap().get(key));
+        }
+
+        // Generate Compressed file with unique map from Optimizer.
+        fileManager.generateCompressedFile(config, storage);
+
+        // Decompression of fill.
+        fileManager.decompress(nameOfFile + "Compressed.txt");
     }
 }
