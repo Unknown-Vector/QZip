@@ -10,7 +10,7 @@
     "noiseFactor" : 1.0E-6,
     "eps" : 1.0E-6,
     "amsgrad" : false,
-    "maxIter" : 300,
+    "maxIter" : 1,
     "tol" : 1.0E-10
   }
 }
