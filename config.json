@@ -1,6 +1,6 @@
 {
   "numVars" : [ 5, 9, 14, 20, 27, 35, 44, 54, 65 ],
-  "numLayers" : 10,
+  "numLayers" : 5,
   "noOfTimes" : 1,
   "noPrimes" : 8,
   "adamSettings" : {

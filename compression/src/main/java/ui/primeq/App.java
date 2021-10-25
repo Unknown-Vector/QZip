@@ -1,19 +1,18 @@
 package ui.primeq;
 
 import java.io.IOException;
-// import java.util.HashMap;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Stack;
+
+import org.ejml.data.ZMatrixRMaj;
+import org.ejml.dense.row.CommonOps_ZDRM;
+import org.ejml.dense.row.NormOps_ZDRM;
 
 import ui.primeq.config.Config;
 import ui.primeq.optimizer.Adam;
 import ui.primeq.optimizer.FunctionManager;
-import org.ejml.data.ZMatrixRMaj;
-import org.ejml.dense.row.CommonOps_ZDRM;
-import org.ejml.dense.row.NormOps_ZDRM;
 
 public class App {
     public static void main( String[] args ) throws IOException {

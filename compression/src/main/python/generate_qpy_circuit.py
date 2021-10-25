@@ -12,6 +12,7 @@ def main(n, no_primes , no_layers):
     circuit_primes = [2,3,5,7,11,17,19,23,29,31]
     circuit_primes = circuit_primes[0: no_primes]
     combinations = combinations = list(cm(range(len(circuit_primes)), 2))
+
     # Generate some circuit coefficients
     root_arg = 1
     for p in circuit_primes:
@@ -25,22 +26,22 @@ def main(n, no_primes , no_layers):
     Qcir.h(range(len(circuit_primes)))
 
     for l in range(no_layers):
-        # Set parameters
+        # Split parameters
         lngth = len(thetas_rshp[l])
         gamma1 = thetas_rshp[l][0: len(circuit_primes)]
         gamma2 = thetas_rshp[l][len(circuit_primes): (len(circuit_primes) + len(combinations))]
         beta   = thetas_rshp[l][(len(circuit_primes) + len(combinations)) : lngth]
 
         for i in range(len(circuit_primes)):
-            Qcir.rz(gamma1[i] * (2 * ln(n / math.sqrt(root_arg)) * ln(circuit_primes[i]) / (l+1)), i)
+            Qcir.rz(gamma1[i] * (2 * ln(n / math.sqrt(root_arg)) * ln(circuit_primes[i]) / (no_layers)), i)
 
         i = 0
         for j,k in combinations:
-            Qcir.rzz(gamma2[i] * (ln(circuit_primes[j]) * ln(circuit_primes[k]) / (l+1)), j, k)
+            Qcir.rzz(gamma2[i] * (ln(circuit_primes[j]) * ln(circuit_primes[k]) / (no_layers)), j, k)
             i+=1
 
         for m in range(len(circuit_primes)):
-            Qcir.rx(beta[m] * (1 / (l+1)) , m)
+            Qcir.rx(beta[m] * (1 / (no_layers)) , m)
     
     with open('./compression/src/main/python/Qcir_current.qpy', 'wb') as fd:
         qpy_serialization.dump(Qcir, fd)

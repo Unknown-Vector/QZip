@@ -1,7 +1,6 @@
 package ui.primeq.optimizer;
 
 import java.util.List;
-// import ai.djl.ndarray.NDArray;
 
 public interface Optimizer {
     // Base Class for optimization algorithms

@@ -37,8 +37,6 @@ def main(arg):
         pool = multiprocessing.Pool(processes = 15)
         stateIter = [(i, shift, hyperparams, quantum_circuit,) for i in range(len(hyperparams))]
         vec = pool.starmap(stateVectorForj, stateIter)
-        # for j in range(len(hyperparams)):
-        #     vec = stateVectorForj(j, shift, hyperparams, quantum_circuit)
         statevec.append(vec)
     
     print(statevec)
