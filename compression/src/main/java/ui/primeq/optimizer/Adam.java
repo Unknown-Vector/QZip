@@ -2,7 +2,9 @@ package ui.primeq.optimizer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Random;
 import java.io.IOException;
 import java.util.stream.DoubleStream;
 import java.util.stream.Collectors;
@@ -11,6 +13,11 @@ import org.apache.commons.math3.util.Combinations;
 import org.apache.commons.math3.analysis.function.Log;
 import org.apache.commons.math3.analysis.function.Sqrt;
 import org.ejml.data.ZMatrixRMaj;
+import org.ejml.dense.row.CommonOps_ZDRM;
+import org.ejml.dense.row.NormOps_ZDRM;
+
+import ui.primeq.QuantumCircuitRunner;
+import ui.primeq.config.Config;
 
 public class Adam implements Optimizer {
     private AdamSettings adamSettings;
@@ -232,6 +239,65 @@ public class Adam implements Optimizer {
         double[] cir_coeffs = circuit_coeffs.stream().mapToDouble(Double::doubleValue).toArray();
 
         return cir_coeffs;
+    }
+
+    public HashMap<Integer, String> processUniqueValues(Config config, int[] data, 
+        FunctionManager functionManager, ArrayList<Integer> remainders) throws IOException {
+        
+        int[] numVars = config.getNumVars();
+        int[] unique = Arrays.stream(data).distinct().toArray();
+        ArrayList<Double> initialPoint =  new ArrayList<>();
+        HashMap<Integer, String> unique_map =  new HashMap<>();
+
+        int n = 0;
+        int j = 0;
+        int t = 0;
+
+        while(j < unique.length){
+            n = unique[j];
+            if(n != 0){
+
+                System.out.println("Running n = " + n + ":");
+                ZMatrixRMaj H = QuantumCircuitRunner.generateCircuitFiles(n, config.getNoPrimes(), config.getNumLayers());
+                double norm = NormOps_ZDRM.normF(H);
+                ZMatrixRMaj H_normalized = CommonOps_ZDRM.elementDivide(H, norm, 0, null);
+
+                while(t < config.getNoOfTimes()){
+                    Random rand = new Random();
+                    initialPoint.clear();
+                    for(int i = 0; i < (numVars[config.getNoPrimes() - 2] * config.getNumLayers()); i++){
+                        initialPoint.add(rand.nextDouble() * Math.PI);
+                    }
+
+                    ArrayList<Double> params = this.minimize(functionManager, initialPoint,  H, n, config.getNoPrimes(), config.getNumLayers());
+
+                    String loss = functionManager.objectivefunction(QuantumCircuitRunner.run(params), n);
+                    // System.out.println(loss);
+
+                    String[] results = loss.split(",");
+                    int r = n - Integer.valueOf(results[1]);
+                    System.out.println("Remainder = " + r);
+                    String sign = "0";
+                    if (r < 0){
+                        sign = "1";
+                    }
+                    if (!remainders.contains(r)) {
+                        remainders.add(Math.abs(r));
+                    }
+
+                    String remainder = Integer.toBinaryString(Math.abs(r));
+
+                    String compressed_data = results[0].trim() + sign + remainder;
+                    unique_map.put(n, compressed_data);
+                    t++;
+                }
+            }
+            QuantumCircuitRunner.flush();
+            System.out.println();
+            j ++;
+            t = 0;
+        }
+        return unique_map;
     }
 
     public OptimizerSupportLevel gradientSupportLevel() {
