@@ -2,7 +2,6 @@ package ui.primeq.optimizer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 import java.io.IOException;
@@ -18,6 +17,7 @@ import org.ejml.dense.row.NormOps_ZDRM;
 
 import ui.primeq.QuantumCircuitRunner;
 import ui.primeq.config.Config;
+import ui.primeq.storage.Storage;
 
 public class Adam implements Optimizer {
     private AdamSettings adamSettings;
@@ -35,8 +35,8 @@ public class Adam implements Optimizer {
     private static int maxsize = 400; 
 
 
-    public Adam(AdamSettings adamSettings){
-        this.adamSettings = adamSettings;
+    public Adam(Config config){
+        this.adamSettings = config.getAdamSettings();
         this.gradientSupportLevel = OptimizerSupportLevel.SUPPORTED;
         this.boundsSupportLevel = OptimizerSupportLevel.IGNORED;
         this.initialpointSupportLevel = OptimizerSupportLevel.SUPPORTED;
@@ -169,15 +169,16 @@ public class Adam implements Optimizer {
         return cir_coeffs;
     }
 
-    public HashMap<Integer, String> processUniqueValues(Config config, int[] data, 
-        FunctionManager functionManager, ArrayList<Integer> remainders) throws IOException {
+    public void processUniqueValues(Config config, FunctionManager functionManager, Storage storage) throws IOException {
         
+        int[] data = storage.getData();
         int[] numVars = config.getNumVars();
         int[] unique = Arrays.stream(data).distinct().toArray();
+        // ArrayList<Integer> remainders = storage.getRemainders();
         System.out.println("Unique Values size = " + unique.length);
-        
+
         ArrayList<Double> initialPoint =  new ArrayList<>();
-        HashMap<Integer, String> unique_map =  new HashMap<>();
+        // HashMap<Integer, String> unique_map =  storage.getUniqueMap();
 
         int n = 0;
         int j = 0;
@@ -212,14 +213,18 @@ public class Adam implements Optimizer {
                     if (r < 0){
                         sign = "1";
                     }
-                    if (!remainders.contains(r)) {
-                        remainders.add(Math.abs(r));
-                    }
+                    // if (!remainders.contains(r)) {
+                    //     remainders.add(Math.abs(r));
+                    // }
+                    storage.addRemainder(r);
 
                     String remainder = Integer.toBinaryString(Math.abs(r));
+                    System.out.println(remainder);
 
-                    String compressed_data = results[0].trim() + sign + remainder;
-                    unique_map.put(n, compressed_data);
+                    String compressedData = results[0].trim() + sign + remainder;
+                    // unique_map.put(n, compressed_data);
+                    storage.addElementsToUniqueMap(n, compressedData);
+                    System.out.println(compressedData);
                     t++;
                 }
             }
@@ -228,7 +233,7 @@ public class Adam implements Optimizer {
             j ++;
             t = 0;
         }
-        return unique_map;
+        return;
     }
 
     public OptimizerSupportLevel gradientSupportLevel() {

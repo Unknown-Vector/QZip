@@ -4,13 +4,15 @@
   "noOfTimes" : 1,
   "noPrimes" : 7,
   "adamSettings" : {
-    "lr" : 0.1,
+    "lr" : 0.001,
     "beta1" : 0.9,
-    "beta2" : 0.999,
-    "noiseFactor" : 0.5,
-    "eps" : 1.0E-4,
+    "beta2" : 0.99,
+    "noiseFactor" : 1.0E-8,
+    "eps" : 1.0E-10,
     "amsgrad" : false,
     "maxIter" : 150,
-    "tol" : 1.0E-10
-  }
+    "tol" : 1.0E-6
+  },
+  "nameOfFile" : "sample",
+  "fileFormat" : ".txt"
 }

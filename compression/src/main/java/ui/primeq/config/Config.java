@@ -23,14 +23,19 @@ public class Config {
     private int noOfTimes;
     private int noPrimes;
     private AdamSettings adamSettings;
+    private String nameOfFile;
+    private String fileFormat;
 
     public Config() {}
 
     private Config(int maxiter, int numLayers, int noOfTimes, int noPrimes, double tol, 
-        double lr, double beta1, double beta2, double noiseFactor, double eps, boolean amsgrad) {
+        double lr, double beta1, double beta2, double noiseFactor, double eps, boolean amsgrad, 
+        String nameOfFile, String fileFormat) {
             this.numLayers = numLayers;
             this.noOfTimes = noOfTimes;
             this.noPrimes = noPrimes;
+            this.nameOfFile = nameOfFile;
+            this.fileFormat = fileFormat;
             setAdamSettings(maxiter, numLayers, noOfTimes, noPrimes, tol, lr, beta1, beta2, noiseFactor, eps, amsgrad);
     }
 
@@ -39,7 +44,7 @@ public class Config {
     }
 
     public Config DefaultConfig() {
-        return new Config(100, 1, 1, 2, 1e-6, 0.001, 0.9, 0.99, 1e-8, 1e-10, false);
+        return new Config(100, 1, 1, 2, 1e-6, 0.001, 0.9, 0.99, 1e-8, 1e-10, false, "sample", ".txt");
     }
 
     private Config readJson() throws IOException{
@@ -61,6 +66,27 @@ public class Config {
 
     public int[] getNumVars() {
         return this.numVars;
+    }
+
+    public String getNameOfFile() {
+        return this.nameOfFile;
+    }
+
+    public void setNameOfFile(String nameOfFile) {
+        this.nameOfFile = nameOfFile;
+    }
+
+    public String getFileFormat() {
+        return this.fileFormat;
+    }
+
+    public void setFileFormat(String fileFormat) {
+        this.fileFormat = fileFormat;
+    }
+
+    @JsonIgnore
+    public Path getSettingsPath() {
+        return this.settingsPath;
     }
 
     @JsonIgnore
@@ -171,6 +197,7 @@ public class Config {
         sb.append("noOfTimes: " + this.noOfTimes);
         sb.append("noPrimes: " + this.noPrimes);
         sb.append("adamSettings: " + this.adamSettings.toString());
+        sb.append("nameOfFile: " + this.nameOfFile);
         return sb.toString();
     }
 }
