@@ -11,7 +11,7 @@ from qiskit.circuit import qpy_serialization
 def main(arg):
     hyperparams = list(map(float, arg.split(" ")))
 
-    with open('compression/src/main/python/Qcir_current.qpy', 'rb') as fd:
+    with open('./src/main/python/Qcir_current.qpy', 'rb') as fd:
         cir = qpy_serialization.load(fd)[0]
 
     free_params = list(cir.parameters)   

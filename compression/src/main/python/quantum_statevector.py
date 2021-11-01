@@ -28,9 +28,12 @@ def main(arg):
     hyperparams = list(map(float, arg.split(" "))) 
     statevec = []
     # main_direcotry = "/compression/src/main/python/"
-    with open('./compression/src/main/python/Qcir_current.qpy', 'rb') as fd:
+    import os
+    cwd = os.getcwd()
+    print(cwd)
+    with open('./src/main/python/Qcir_current.qpy', 'rb') as fd:
         quantum_circuit = qpy_serialization.load(fd)[0]
-
+   
     for shift in [PI/2, -PI/2]:
         pool = multiprocessing.Pool(processes = 15)
         stateIter = [(i, shift, hyperparams, quantum_circuit,) for i in range(len(hyperparams))]

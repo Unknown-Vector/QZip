@@ -16,7 +16,7 @@ public class Config {
     public static final int MAXREMAINDER = 15;
     public static final int[] primes = {2,3,5,7,11,13,17,19,23,29,31};
 
-    private Path settingsPath = Paths.get("./config.json");
+    private Path settingsPath = Paths.get("../config.json");
 
     private int[] numVars = {5, 9, 14, 20, 27, 35, 44, 54, 65};
     private int numLayers;

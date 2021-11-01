@@ -199,9 +199,10 @@ public class Adam implements Optimizer {
                         initialPoint.add(rand.nextDouble() * Math.PI);
                     }
 
-                    ArrayList<Double> params = this.minimize(functionManager, initialPoint,  H, n, config.getNoPrimes(), config.getNumLayers());
+                    // ArrayList<Double> params = this.minimize(functionManager, initialPoint,  H, n, config.getNoPrimes(), config.getNumLayers());
 
-                    String loss = functionManager.objectivefunction(QuantumCircuitRunner.run(params), n);
+                    // String loss = functionManager.objectivefunction(QuantumCircuitRunner.run(params), n);
+                    String loss = functionManager.objectivefunction(QuantumCircuitRunner.runFactorization(n), n);
                     // System.out.println(loss);
 
                     String[] results = loss.split(",");

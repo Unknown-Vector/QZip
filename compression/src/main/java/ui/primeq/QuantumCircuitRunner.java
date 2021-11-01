@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.IntPredicate;
 import java.util.regex.*;
 import java.io.File;
 
@@ -70,7 +71,7 @@ public class QuantumCircuitRunner {
     }
 
     public static void flush(){
-        File python_resource = new File("compression/src/main/python/Qcir_current.qpy"); 
+        File python_resource = new File("./src/main/python/Qcir_current.qpy"); 
         if (python_resource.delete()) { 
         } else {
                 System.out.println("Failed to delete Circuit file.");
@@ -78,8 +79,8 @@ public class QuantumCircuitRunner {
     }
 
     public static ZMatrixRMaj generateCircuitFiles(int n, int no_primes, int no_layers){
-        final String CircuitFile = "./compression/src/main/python/generate_qpy_circuit.py";
-        final String HamilFile = System.getProperty("user.dir") + "/compression/src/main/python/generate_OpMatrix.py";
+        final String CircuitFile = "./src/main/python/generate_qpy_circuit.py";
+        final String HamilFile =  "./src/main/python/generate_OpMatrix.py";
         String diagonals = "";
 
         // TODO: Change to multiprocessing if possible, currently uses python multiprocessing
@@ -88,7 +89,7 @@ public class QuantumCircuitRunner {
             cmd[0] = "python";
             cmd[1] = HamilFile;
             cmd[2] = String.valueOf(n) + " " + String.valueOf(no_primes);
-            
+
             Runtime r = Runtime.getRuntime();
             Process p = r.exec(cmd);
             String o = "";
@@ -167,7 +168,7 @@ public class QuantumCircuitRunner {
     }
 
     public static  ArrayList<ArrayList<ZMatrixRMaj>> stateVectors(ArrayList<Double> input) throws IOException{
-        final String svFile = System.getProperty("user.dir") + "/compression/src/main/python/quantum_statevector.py";
+        final String svFile = "./src/main/python/quantum_statevector.py";
         String var = stringify(input);
         String states = "";
 
@@ -210,8 +211,34 @@ public class QuantumCircuitRunner {
     }
 
     public static HashMap<String, Integer> run(ArrayList<Double> input) throws IOException{
-        final String circuitFile = System.getProperty("user.dir") + "/compression/src/main/python/quantum_circuit_run.py";
+        final String circuitFile = "./src/main/python/quantum_circuit_run.py";
         String var = stringify(input);       
+        String output = "";
+    
+        try{
+            String[] cmd = new String[3];
+            cmd[0] = "python";
+            cmd[1] = circuitFile;
+            cmd[2] = var;
+            
+            Runtime r = Runtime.getRuntime();
+            Process p = r.exec(cmd);
+            
+            String o = "";
+            BufferedReader out = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while((o = out.readLine()) != null){
+                output += o;
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return refineCircuitResults(output);
+    }
+
+    public static HashMap<String, Integer> runFactorization(int input) throws IOException{
+        final String circuitFile = "./src/main/python/factorize_n.py";
+        String var = Integer.toString(input);       
         String output = "";
     
         try{

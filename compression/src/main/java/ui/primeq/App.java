@@ -16,7 +16,7 @@ public class App {
         config = config.initConfig();
 
         // Initialize constants
-        String nameOfFile = "sample";
+        String nameOfFile = "GCF_009858895.2_ASM985889v3_genomic";
         
         // Initialize Managers
         FileManager fileManager =  new FileManager();
@@ -30,7 +30,7 @@ public class App {
         HashMap<Integer, String> unique_map =  new HashMap<>();
 
         // Convert File into int array to be processed
-        int[] data = fileManager.readFile("./" + nameOfFile + ".txt");
+        int[] data = fileManager.readFile("../" + nameOfFile + ".gff");
 
         // Process Unique Values with Optimizer
         unique_map = opt.processUniqueValues(config, data, functionManager, remainders);

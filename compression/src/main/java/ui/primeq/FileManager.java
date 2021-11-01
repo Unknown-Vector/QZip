@@ -104,7 +104,6 @@ public class FileManager {
         int k = 0;
         while(bytebuf.remaining() > 0){          
             char x = bytebuf.getChar();
-            System.out.println((int) x);
             data_int[k] = (int) x;
             k++;
         }

@@ -43,7 +43,7 @@ def main(n, no_primes , no_layers):
         for m in range(len(circuit_primes)):
             Qcir.rx(beta[m] * (1 / (no_layers)) , m)
     
-    with open('./compression/src/main/python/Qcir_current.qpy', 'wb') as fd:
+    with open('./src/main/python/Qcir_current.qpy', 'wb') as fd:
         qpy_serialization.dump(Qcir, fd)
 
     print("Generated Circuit File......")
